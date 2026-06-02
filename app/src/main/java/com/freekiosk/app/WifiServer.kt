@@ -71,8 +71,8 @@ h2{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;mar
 <div class="card">
   <h2>Subir PDFs</h2>
   <div class="drop">
-    <input type="file" accept=".pdf" multiple onchange="upload(this.files)">
-    <p style="color:#64748b">Arrastra PDFs aquí o toca para seleccionar</p>
+    <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.mp4,.mkv,.mov,.avi,.webm" multiple onchange="upload(this.files)">
+    <p style="color:#64748b">Arrastra archivos aquí o toca para seleccionar<br><small style="font-size:10px">PDF · JPG · PNG · WebP · MP4 · MKV · MOV</small></p>
   </div>
 </div>
 <div class="card">
@@ -116,8 +116,15 @@ load();
             val tmpPath = files["file"] ?: return newFixedLengthResponse(
                 Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "No file"
             )
-            val filename = session.parameters["file"]?.firstOrNull() ?: "upload.pdf"
+            val filename = session.parameters["file"]?.firstOrNull() ?: "upload.bin"
             val safeName = File(filename).name
+            // Validar que la extensión esté soportada
+            if (FileManager.mediaTypeOf(File(safeName)) == null) {
+                return newFixedLengthResponse(
+                    Response.Status.BAD_REQUEST, MIME_PLAINTEXT,
+                    "Formato no soportado. Usa: PDF, JPG, PNG, WebP, MP4, MKV, MOV"
+                )
+            }
             File(tmpPath).copyTo(File(pdfsDir, safeName), overwrite = true)
             newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, "OK")
         } catch (e: Exception) {
@@ -141,12 +148,17 @@ load();
     }
 
     private fun serveFileList(): Response {
-        val files = FileManager.listPdfs(pdfsDir)
+        val files = FileManager.listMedia(pdfsDir)
         val json = buildString {
             append("""{"files":[""")
-            files.forEachIndexed { i, f ->
+            files.forEachIndexed { i, mf ->
                 if (i > 0) append(",")
-                append("""{"name":"${f.name}","size":${f.length()}}""")
+                val icon = when (mf.type) {
+                    MediaType.PDF   -> "📄"
+                    MediaType.IMAGE -> "🖼️"
+                    MediaType.VIDEO -> "🎬"
+                }
+                append("""{"name":"${mf.file.name}","size":${mf.file.length()},"type":"${mf.type.name.lowercase()}","icon":"$icon"}""")
             }
             append("]}")
         }
