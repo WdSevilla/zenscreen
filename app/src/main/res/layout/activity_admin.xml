@@ -182,6 +182,15 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/setLauncherBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Establecer como launcher"
+            android:textColor="#e2e8f0"
+            android:backgroundTint="#22263a"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/backToKioskBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

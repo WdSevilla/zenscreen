@@ -1,9 +1,13 @@
 package com.freekiosk.app
 
+import android.app.role.RoleManager
+import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.text.format.Formatter
@@ -37,6 +41,7 @@ class AdminActivity : AppCompatActivity() {
         super.onResume()
         refreshFileCount()
         setupServerUrl()
+        updateLauncherButton()
     }
 
     private fun setupServerUrl() {
@@ -116,8 +121,51 @@ class AdminActivity : AppCompatActivity() {
         binding.importUsbBtn.setOnClickListener {
             pickPdf.launch("application/pdf")
         }
+        binding.setLauncherBtn.setOnClickListener {
+            requestDefaultLauncher()
+        }
         binding.backToKioskBtn.setOnClickListener {
             finish()
         }
+    }
+
+    private fun requestDefaultLauncher() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val roleManager = getSystemService(RoleManager::class.java)
+            if (roleManager.isRoleAvailable(RoleManager.ROLE_HOME)) {
+                startActivityForResult(
+                    roleManager.createRequestRoleIntent(RoleManager.ROLE_HOME),
+                    REQ_HOME_ROLE
+                )
+            }
+        } else {
+            startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
+        }
+    }
+
+    private fun isDefaultLauncher(): Boolean {
+        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
+        val info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return info?.activityInfo?.packageName == packageName
+    }
+
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_HOME_ROLE) updateLauncherButton()
+    }
+
+    private fun updateLauncherButton() {
+        if (isDefaultLauncher()) {
+            binding.setLauncherBtn.text = "✓ ZenScreen es el launcher activo"
+            binding.setLauncherBtn.backgroundTintList = ColorStateList.valueOf(0xFF166534.toInt())
+        } else {
+            binding.setLauncherBtn.text = "Establecer como launcher"
+            binding.setLauncherBtn.backgroundTintList = ColorStateList.valueOf(0xFF22263a.toInt())
+        }
+    }
+
+    companion object {
+        private const val REQ_HOME_ROLE = 101
     }
 }
