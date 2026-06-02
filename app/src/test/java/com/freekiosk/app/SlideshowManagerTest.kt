@@ -34,7 +34,7 @@ class SlideshowManagerTest {
 
     @Test
     fun `isEmpty returns true for empty list`() {
-        assertTrue(SlideshowManager(emptyList()).isEmpty())
+        assertTrue(SlideshowManager<String>(emptyList()).isEmpty())
     }
 
     @Test
