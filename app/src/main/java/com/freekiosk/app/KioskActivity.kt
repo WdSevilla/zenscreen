@@ -44,9 +44,15 @@ class KioskActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    // Bloquear botón Atrás — no hace nada en modo kiosk
+    // Bloquear botón Atrás
     @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() { /* bloqueado */ }
+
+    // Re-ocultar barras si el usuario desliza desde el borde
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemUI()
+    }
 
     // Intentar activar pin task (Screen Pinning) al arrancar
     private fun tryLockTask() {
