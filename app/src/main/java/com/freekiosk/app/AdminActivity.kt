@@ -66,8 +66,21 @@ class AdminActivity : AppCompatActivity() {
 
     private fun refreshFileCount() {
         val dir = FileManager.getPdfsDir(this)
-        val count = FileManager.listPdfs(dir).size
-        binding.fileCountText.text = "$count PDF(s) en la tablet"
+        val all = FileManager.listMedia(dir)
+        val pdfs   = all.count { it.type == MediaType.PDF }
+        val images = all.count { it.type == MediaType.IMAGE }
+        val videos = all.count { it.type == MediaType.VIDEO }
+        binding.fileCountText.text = buildString {
+            append("${all.size} archivo(s) en la tablet")
+            if (all.isNotEmpty()) {
+                append("\n")
+                val parts = mutableListOf<String>()
+                if (pdfs   > 0) parts.add("📄 $pdfs PDF")
+                if (images > 0) parts.add("🖼️ $images imagen${if (images > 1) "es" else ""}")
+                if (videos > 0) parts.add("🎬 $videos video${if (videos > 1) "s" else ""}")
+                append(parts.joinToString(" · "))
+            }
+        }
     }
 
     private fun importPdf(uri: Uri) {
