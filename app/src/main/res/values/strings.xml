@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FreeKiosk</string>
+    <string name="app_name">ZenScreen</string>
     <string name="pin_wrong">PIN incorrecto</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.freekiosk.app-mergeDebugResources-30:/layout/dialog_pin.xml",
+        "source": "com.freekiosk.app-main-33:/layout/dialog_pin.xml"
+    },
+    {
+        "merged": "com.freekiosk.app-mergeDebugResources-30:/layout/activity_admin.xml",
+        "source": "com.freekiosk.app-main-33:/layout/activity_admin.xml"
+    },
+    {
+        "merged": "com.freekiosk.app-mergeDebugResources-30:/layout/activity_kiosk.xml",
+        "source": "com.freekiosk.app-main-33:/layout/activity_kiosk.xml"
+    }
+]

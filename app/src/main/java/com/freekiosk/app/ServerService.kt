@@ -49,7 +49,7 @@ class ServerService : Service() {
     private fun buildNotification(): Notification {
         val ip = try { getLocalIp() } catch (e: Exception) { "127.0.0.1" }
         return Notification.Builder(this, CHANNEL_ID)
-            .setContentTitle("FreeKiosk activo")
+            .setContentTitle("ZenScreen activo")
             .setContentText("Dashboard: http://$ip:$SERVER_PORT")
             .setSmallIcon(R.drawable.ic_notification)
             .setOngoing(true)
@@ -59,9 +59,9 @@ class ServerService : Service() {
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "FreeKiosk Server",
+            "ZenScreen Server",
             NotificationManager.IMPORTANCE_LOW
-        ).apply { description = "Servidor WiFi de FreeKiosk" }
+        ).apply { description = "Servidor WiFi de ZenScreen" }
         getSystemService(NotificationManager::class.java)
             .createNotificationChannel(channel)
     }

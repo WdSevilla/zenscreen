@@ -1,0 +1,30 @@
+R_DEF: Internal format may change without notice
+local
+color accent
+color bg
+color muted
+color surface
+color text
+drawable ic_notification
+id adminTrigger
+id backToKioskBtn
+id btnOrientLandscape
+id btnOrientPortrait
+id btnOrientSensor
+id emptyText
+id fileCountText
+id importUsbBtn
+id intervalLabel
+id intervalSlider
+id pdfImageView
+id pinInput
+id serverUrlText
+layout activity_admin
+layout activity_kiosk
+layout dialog_pin
+mipmap ic_launcher
+string app_name
+string cancel
+string confirm
+string pin_wrong
+style Theme.ZenScreen

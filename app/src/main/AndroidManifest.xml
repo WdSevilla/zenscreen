@@ -17,7 +17,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.FreeKiosk"
+        android:theme="@style/Theme.ZenScreen"
         android:hardwareAccelerated="true">
 
         <activity

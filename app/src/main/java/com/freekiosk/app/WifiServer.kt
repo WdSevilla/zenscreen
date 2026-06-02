@@ -22,7 +22,7 @@ class WifiServer(
         val html = buildString {
             append("""<!DOCTYPE html><html lang="es"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FreeKiosk Admin</title>
+<title>ZenScreen Admin</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#0f1117;color:#e2e8f0;padding:24px}
@@ -39,7 +39,7 @@ h2{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;mar
 .status{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:8px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 </style></head><body>
-<h1>📺 FreeKiosk · Gestión WiFi</h1>
+<h1>📺 ZenScreen · Gestión WiFi</h1>
 <div class="card">
   <h2><span class="status"></span>Servidor activo</h2>
   <p style="color:#64748b;font-size:13px">Archivos en la tablet</p>
