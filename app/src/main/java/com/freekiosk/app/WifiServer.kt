@@ -63,8 +63,8 @@ async function load(){
   document.getElementById('list').innerHTML=d.files.length===0
     ?'<p style="color:#64748b;font-size:13px">Sin archivos todavía</p>'
     :d.files.map(f=>`<div class="file-row">
-      <span style="font-size:14px">📄 ${f.name} <span style="color:#64748b;font-size:11px">(${(f.size/1024).toFixed(1)} KB)</span></span>
-      <button class="btn-del" onclick="del('${f.name}')">Borrar</button>
+      <span style="font-size:14px">📄 ${'$'}{f.name} <span style="color:#64748b;font-size:11px">(${'$'}{(f.size/1024).toFixed(1)} KB)</span></span>
+      <button class="btn-del" onclick="del('${'$'}{f.name}')">Borrar</button>
     </div>`).join('');
 }
 async function upload(files){
