@@ -9,6 +9,8 @@ import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
 import com.freekiosk.app.databinding.ActivityKioskBinding
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.io.File
 
 class KioskActivity : AppCompatActivity() {
@@ -16,7 +18,9 @@ class KioskActivity : AppCompatActivity() {
     private lateinit var binding: ActivityKioskBinding
     private var slideshow = SlideshowManager<File>(emptyList())
     private var slideshowJob: Job? = null
+    private var renderJob: Job? = null          // job del render activo
     private var currentRenderer: PdfPageRenderer? = null
+    private val renderMutex = Mutex()           // serializa acceso al renderer
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +43,7 @@ class KioskActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         slideshowJob?.cancel()
+        renderJob?.cancel()
         currentRenderer?.close()
         scope.cancel()
         super.onDestroy()
@@ -105,19 +110,29 @@ class KioskActivity : AppCompatActivity() {
         if (slideshow.isEmpty()) return
         val file = slideshow.current()
 
-        scope.launch(Dispatchers.IO) {
+        // Cancelar render anterior antes de iniciar uno nuevo
+        renderJob?.cancel()
+        renderJob = scope.launch(Dispatchers.IO) {
             val w = binding.pdfImageView.width.takeIf { it > 0 } ?: 1080
             val h = binding.pdfImageView.height.takeIf { it > 0 } ?: 1920
-            try {
-                currentRenderer?.close()
-                val renderer = PdfPageRenderer(file)
-                currentRenderer = renderer
-                val bitmap = renderer.renderPage(0, w, h)
-                withContext(Dispatchers.Main) {
-                    binding.pdfImageView.setImageBitmap(bitmap)
+            renderMutex.withLock {
+                if (!isActive) return@withLock
+                try {
+                    currentRenderer?.close()
+                    currentRenderer = null
+                    val renderer = PdfPageRenderer(file)
+                    currentRenderer = renderer
+                    val bitmap = renderer.renderPage(0, w, h)
+                    if (isActive) {
+                        withContext(Dispatchers.Main) {
+                            binding.pdfImageView.setImageBitmap(bitmap)
+                        }
+                    }
+                } catch (e: Exception) {
+                    if (isActive) {
+                        withContext(Dispatchers.Main) { advance() }
+                    }
                 }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) { advance() }
             }
         }
     }
