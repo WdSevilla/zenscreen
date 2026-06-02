@@ -5,7 +5,7 @@
 <h1 align="center">ZenScreen</h1>
 
 <p align="center">
-  App Android de kiosk para exhibir PDFs en pantalla completa.<br/>
+  App Android de kiosk para exhibir PDFs, imágenes y videos en pantalla completa.<br/>
   Servidor WiFi integrado, panel de administración oculto y arranque automático.
 </p>
 
@@ -19,22 +19,32 @@
 
 ## ¿Para qué sirve?
 
-Pensada para tabletas fijas en **recepciones, salas de espera, exhibiciones o puntos de información** donde se necesite mostrar documentos PDF de forma continua y desatendida, sin que el usuario pueda salir de la app.
+Pensada para tabletas fijas en **recepciones, salas de espera, exhibiciones o puntos de información** donde se necesite mostrar contenido multimedia de forma continua y desatendida, sin que el usuario pueda salir de la app.
 
 ---
 
 ## Características
 
-- 📄 **Slideshow de PDFs** en bucle infinito
-- ⏱️ **Intervalo configurable** de 3 a 60 segundos
-- 👆 **Toque para avanzar** manualmente
+- 📄 **Slideshow de PDFs, imágenes y videos** en bucle infinito
+- ⏱️ **Duración variable** — PDFs e imágenes usan el intervalo configurado; videos duran lo que dura el video
+- 👆 **Toque para avanzar** manualmente (también salta videos)
 - 🔒 **Modo kiosk** — bloquea Atrás, oculta barras del sistema
 - 🏠 **Launcher integrado** — Home siempre vuelve al kiosk
 - 🔄 **Arranque automático** al encender la tablet
-- 📡 **Servidor WiFi** con autenticación — sube/elimina PDFs desde el browser
+- 📡 **Servidor WiFi** con autenticación — sube/elimina archivos desde el browser
 - 🛠️ **Panel de administración** oculto con PIN
 - 🔃 **Orientación configurable** — vertical, horizontal o automática
 - 🔑 **PIN, puerto y credenciales** configurables desde la interfaz
+
+---
+
+## Formatos soportados
+
+| Tipo | Extensiones |
+|------|-------------|
+| 📄 PDF | `.pdf` |
+| 🖼️ Imagen | `.jpg` `.jpeg` `.png` `.webp` `.gif` `.bmp` |
+| 🎬 Video | `.mp4` `.mkv` `.mov` `.avi` `.webm` `.3gp` |
 
 ---
 
@@ -73,7 +83,7 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 
 ### 1 · Permisos
 La app los solicita automáticamente al primer arranque:
-- Almacenamiento (leer PDFs)
+- Almacenamiento (leer archivos)
 - Notificaciones (servidor WiFi en segundo plano)
 
 ### 2 · Establecer como launcher
@@ -88,7 +98,7 @@ Para que el servidor WiFi no sea detenido por Android:
 
 ---
 
-## Subir PDFs
+## Subir archivos
 
 ### Vía WiFi _(recomendado)_
 
@@ -97,7 +107,7 @@ Para que el servidor WiFi no sea detenido por Android:
 3. Anota la URL en **Servidor WiFi** — ejemplo: `http://192.168.1.100:8080`
 4. Abre esa URL en el browser de tu PC
 5. Introduce las credenciales cuando las pida el browser
-6. Arrastra o selecciona los PDFs a subir
+6. Arrastra o selecciona los archivos a subir (PDF, imagen o video)
 
 **Credenciales por defecto:**
 ```
@@ -111,7 +121,7 @@ Contraseña: zenscreen
 
 1. Conecta la tablet por USB o usa un explorador de archivos
 2. Navega a: `Android/data/com.freekiosk.app/files/pdfs/`
-3. Copia tus PDFs ahí
+3. Copia tus archivos ahí (PDF, imagen o video)
 4. El kiosk los detecta al próximo ciclo
 
 ---
@@ -139,8 +149,8 @@ El panel es **invisible** para los usuarios — solo el administrador sabe cómo
 | Sección | Descripción |
 |---------|-------------|
 | **Servidor WiFi** | URL y credenciales para subir archivos desde PC |
-| **Archivos en tablet** | Cantidad de PDFs + importar desde almacenamiento |
-| **Intervalo slideshow** | Slider de 3 a 60 segundos |
+| **Archivos en tablet** | Conteo por tipo (📄 PDFs · 🖼️ imágenes · 🎬 videos) + importar desde almacenamiento |
+| **Intervalo slideshow** | Slider de 3 a 60 segundos (aplica a PDFs e imágenes; videos ignoran este valor) |
 | **Orientación de pantalla** | Vertical / Horizontal / Auto |
 | **Configuración avanzada** | Cambiar PIN, puerto del servidor y credenciales WiFi |
 | **Establecer como launcher** | Abre ajustes del sistema para configurar como app de inicio |
@@ -183,7 +193,7 @@ ZenScreen implementa tres capas sin necesidad de root ni Device Owner:
 zenscreen/
 ├── app/src/main/java/com/freekiosk/app/
 │   ├── MainActivity.kt          # Entry point: permisos → launcher → kiosk
-│   ├── KioskActivity.kt         # Pantalla principal: slideshow fullscreen
+│   ├── KioskActivity.kt         # Pantalla principal: slideshow PDF/imagen/video
 │   ├── AdminActivity.kt         # Panel de configuración con PIN
 │   ├── PinDialogFragment.kt     # Diálogo de PIN
 │   ├── ServerService.kt         # Foreground service: mantiene servidor activo
@@ -191,7 +201,7 @@ zenscreen/
 │   ├── BootReceiver.kt          # BroadcastReceiver: auto-start al encender
 │   ├── PdfPageRenderer.kt       # Wrapper de Android PdfRenderer
 │   ├── SlideshowManager.kt      # Navegación circular entre archivos
-│   ├── FileManager.kt           # Operaciones de archivos PDF
+│   ├── FileManager.kt           # MediaType, MediaFile, listMedia(), saveMedia()
 │   └── Prefs.kt                 # SharedPreferences: toda la configuración
 └── app/src/main/res/
     ├── layout/                  # Layouts XML
@@ -205,9 +215,10 @@ Encendido
   └── BootReceiver
         ├── Inicia ServerService  →  NanoHTTPD en puerto configurado
         └── Abre KioskActivity
-              ├── Carga PDFs desde /pdfs/
-              ├── Slideshow en bucle (coroutine + Mutex anti-crash)
-              ├── Toque pantalla  →  avanza PDF + reinicia timer
+              ├── Carga PDFs/imágenes/videos desde /pdfs/
+              ├── PDF/Imagen  →  renderiza + timer configurable
+              ├── Video       →  ExoPlayer, avanza al terminar
+              ├── Toque pantalla  →  salta al siguiente
               └── Toque largo esquina  →  PIN  →  AdminActivity
 ```
 
@@ -216,9 +227,9 @@ Encendido
 | Endpoint | Método | Auth | Descripción |
 |----------|--------|------|-------------|
 | `/` | GET | ✅ | Dashboard HTML |
-| `/api/files` | GET | ✅ | Lista PDFs en JSON |
-| `/upload` | POST | ✅ | Subir PDF (multipart) |
-| `/delete` | POST | ✅ | Eliminar PDF por nombre |
+| `/api/files` | GET | ✅ | Lista archivos con tipo e ícono en JSON |
+| `/upload` | POST | ✅ | Subir PDF, imagen o video (multipart) |
+| `/delete` | POST | ✅ | Eliminar archivo por nombre |
 
 ---
 
@@ -233,13 +244,18 @@ Encendido
 - Algunos routers tienen **aislamiento de AP** activado — desactívalo en la configuración del router
 - Verifica la IP en el panel admin — puede cambiar si el router asigna IPs dinámicas
 
-### Los PDFs no aparecen después de subirlos
+### Los archivos no aparecen después de subirlos
 - Entra al panel admin y toca **Volver al kiosk** — esto fuerza el reload
 
 ### El browser pide usuario y contraseña
 - Es correcto — el servidor tiene autenticación activa
 - Credenciales por defecto: `admin` / `zenscreen`
 - Si las cambiaste y no las recuerdas: reinstala la app para resetear a los valores por defecto
+
+### El video no reproduce o la app se cierra
+- Verifica que el formato sea soportado: `.mp4`, `.mkv`, `.mov`, `.avi`, `.webm`, `.3gp`
+- Videos muy grandes pueden tardar en cargar — es normal
+- Si el video está corrupto, el slideshow avanza automáticamente al siguiente archivo
 
 ### Build falla con "defined multiple times"
 macOS crea duplicados al copiar/mover carpetas. Solución:
@@ -260,6 +276,8 @@ find app/build -name "* 2.*" -delete
 |-----------|---------|-----|
 | Kotlin | 1.9.22 | Lenguaje principal |
 | Android PdfRenderer | Built-in | Renderizado nativo de PDFs |
+| ExoPlayer (Media3) | 1.3.0 | Reproducción de video |
+| BitmapFactory | Built-in | Decodificación de imágenes |
 | NanoHTTPD | 2.3.1 | Servidor HTTP embebido |
 | Kotlinx Coroutines | 1.7.3 | Slideshow timer y renders async |
 | Material Components | 1.11.0 | UI del panel admin |
