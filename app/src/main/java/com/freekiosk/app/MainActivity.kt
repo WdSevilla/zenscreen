@@ -22,10 +22,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestPermissionsIfNeeded() {
         val needed = mutableListOf<String>()
+
+        // Storage permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
                 != PackageManager.PERMISSION_GRANTED) {
                 needed.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+            // POST_NOTIFICATIONS required for foreground service notification on API 33+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                needed.add(Manifest.permission.POST_NOTIFICATIONS)
             }
         } else {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -33,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 needed.add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
+
         if (needed.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, needed.toTypedArray(), REQ_PERMISSIONS)
         } else {
