@@ -24,9 +24,9 @@ class AdminActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdminBinding
 
-    private val pickPdf = registerForActivityResult(
+    private val pickMedia = registerForActivityResult(
         ActivityResultContracts.GetMultipleContents()
-    ) { uris -> uris.forEach { importPdf(it) }; refreshFileCount() }
+    ) { uris -> uris.forEach { importMedia(it) }; refreshFileCount() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,11 +83,16 @@ class AdminActivity : AppCompatActivity() {
         }
     }
 
-    private fun importPdf(uri: Uri) {
+    private fun importMedia(uri: Uri) {
         val dir = FileManager.getPdfsDir(this)
-        val name = getFileName(uri) ?: "import_${System.currentTimeMillis()}.pdf"
+        val name = getFileName(uri) ?: "import_${System.currentTimeMillis()}"
+        // Solo importar si el tipo es soportado
+        if (FileManager.mediaTypeOf(java.io.File(name)) == null) {
+            toast("Formato no soportado: $name")
+            return
+        }
         contentResolver.openInputStream(uri)?.use { input ->
-            FileManager.savePdf(dir, name, input.readBytes())
+            FileManager.saveMedia(dir, name, input.readBytes())
         }
     }
 
@@ -290,7 +295,8 @@ class AdminActivity : AppCompatActivity() {
 
     private fun setupButtons() {
         binding.importUsbBtn.setOnClickListener {
-            pickPdf.launch("application/pdf")
+            // "*/*" muestra todos los archivos; el usuario puede seleccionar PDF, imagen o video
+            pickMedia.launch("*/*")
         }
         binding.setLauncherBtn.setOnClickListener {
             requestDefaultLauncher()
