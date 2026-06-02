@@ -40,6 +40,9 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.nanohttpd)
     implementation(libs.kotlinx.coroutines.android)
+    // ExoPlayer para reproducción de video
+    implementation("androidx.media3:media3-exoplayer:1.3.0")
+    implementation("androidx.media3:media3-ui:1.3.0")
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
     androidTestImplementation(libs.androidx.test.ext.junit)
