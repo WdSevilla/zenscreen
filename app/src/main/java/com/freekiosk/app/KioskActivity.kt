@@ -32,6 +32,7 @@ class KioskActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        applyOrientation()
         reloadAndStart()
     }
 

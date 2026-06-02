@@ -85,10 +85,7 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun setupOrientationButtons() {
-        val current = Prefs.getOrientation(this)
-        binding.btnOrientPortrait.isSelected  = current == "portrait"
-        binding.btnOrientLandscape.isSelected = current == "landscape"
-        binding.btnOrientSensor.isSelected    = current == "sensor"
+        highlightOrientation(Prefs.getOrientation(this))
 
         binding.btnOrientPortrait.setOnClickListener {
             Prefs.setOrientation(this, "portrait")
@@ -105,9 +102,11 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun highlightOrientation(selected: String) {
-        binding.btnOrientPortrait.isSelected  = selected == "portrait"
-        binding.btnOrientLandscape.isSelected = selected == "landscape"
-        binding.btnOrientSensor.isSelected    = selected == "sensor"
+        val active   = 0xFF4f8ef7.toInt()
+        val inactive = 0xFF22263a.toInt()
+        binding.btnOrientPortrait.setBackgroundColor( if (selected == "portrait")  active else inactive)
+        binding.btnOrientLandscape.setBackgroundColor(if (selected == "landscape") active else inactive)
+        binding.btnOrientSensor.setBackgroundColor(   if (selected == "sensor")    active else inactive)
     }
 
     private fun setupButtons() {
