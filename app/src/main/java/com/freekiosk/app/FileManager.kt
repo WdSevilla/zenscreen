@@ -28,6 +28,10 @@ object FileManager {
         }
     }
 
+    /**
+     * Lista todos los archivos de media soportados en [dir] (no recursivo),
+     * ordenados por nombre. Archivos con extensiones no reconocidas son ignorados.
+     */
     fun listMedia(dir: File): List<MediaFile> =
         dir.listFiles()
             ?.mapNotNull { f -> mediaTypeOf(f)?.let { MediaFile(f, it) } }
@@ -43,6 +47,12 @@ object FileManager {
 
     fun savePdf(dir: File, name: String, bytes: ByteArray) = saveMedia(dir, name, bytes)
 
+    /**
+     * Guarda bytes en [dir] con nombre [name].
+     * Path traversal prevention incluido.
+     * IMPORTANTE: El llamante es responsable de validar que la extensión
+     * sea un tipo soportado (usa [mediaTypeOf]) antes de llamar este método.
+     */
     fun saveMedia(dir: File, name: String, bytes: ByteArray) {
         val safe = File(name).name
         File(dir, safe).writeBytes(bytes)

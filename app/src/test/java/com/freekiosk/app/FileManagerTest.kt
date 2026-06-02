@@ -105,4 +105,23 @@ class FileManagerTest {
         assertFalse(File(dir.parent, "evil.pdf").exists())
         assertTrue(File(dir, "evil.pdf").exists())
     }
+
+    @Test
+    fun `mediaTypeOf returns null for file with no extension`() {
+        assertNull(FileManager.mediaTypeOf(File("noextension")))
+    }
+
+    @Test
+    fun `mediaTypeOf covers all image extensions`() {
+        listOf("jpeg", "gif", "bmp").forEach { ext ->
+            assertEquals(MediaType.IMAGE, FileManager.mediaTypeOf(File("file.$ext")))
+        }
+    }
+
+    @Test
+    fun `mediaTypeOf covers all video extensions`() {
+        listOf("avi", "webm", "3gp").forEach { ext ->
+            assertEquals(MediaType.VIDEO, FileManager.mediaTypeOf(File("file.$ext")))
+        }
+    }
 }
