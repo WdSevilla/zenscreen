@@ -346,6 +346,47 @@ find app/build -name "* 2.*" -delete
 
 ---
 
+## Versiones
+
+ZenScreen usa **versionamiento semántico**: `MAJOR.MINOR.PATCH`
+
+| Parte | Cuándo sube |
+|-------|-------------|
+| `MAJOR` | Cambios incompatibles o rediseños completos |
+| `MINOR` | Funciones nuevas compatibles hacia atrás |
+| `PATCH` | Correcciones de bugs sin funciones nuevas |
+
+El número de build (`versionCode`) sube con cada APK publicado, independientemente del nombre de versión. La versión se muestra al pie del **panel de administración**.
+
+---
+
+## Changelog
+
+### v1.1.0 — 2026-06-02
+**Nuevas funciones**
+- Gestión de archivos desde el panel admin: lista con checkboxes, borrado individual y múltiple, drag & drop para reordenar
+- Servidor WiFi: selección múltiple con checkboxes, botón "Borrar seleccionados", drag & drop para reordenar (guardado automático)
+- Navegación táctil: tap mitad izquierda = anterior, tap mitad derecha = siguiente
+- Transiciones con fade in (400 ms) al cambiar de slide — PDF, imagen y video
+- Versión visible en el panel de administración
+
+**Correcciones**
+- Al volver del panel admin el slideshow retoma el archivo que se estaba mostrando, no reinicia desde el primero
+- El timer del slideshow se pausa al abrir el panel admin y reanuda al volver
+- Flash de imagen anterior al terminar un video eliminado (`pdfImageView` se limpia antes de hacer fade in)
+- Crash en `PlayerView` por atributo `show_buffering` incompatible con Media3 1.3.0
+
+### v1.0.0 — inicial
+- Slideshow en bucle de PDFs, imágenes y videos
+- Servidor WiFi con autenticación Basic Auth (subir y eliminar archivos)
+- Panel de administración oculto con PIN
+- Modo kiosk: bloqueo de Atrás, barras del sistema ocultas
+- Launcher integrado, arranque automático al encender
+- Orientación configurable: vertical, horizontal, automática
+- Ajustes: PIN, puerto del servidor, usuario y contraseña WiFi, intervalo del slideshow
+
+---
+
 ## Contribuir
 
 1. Fork del repositorio

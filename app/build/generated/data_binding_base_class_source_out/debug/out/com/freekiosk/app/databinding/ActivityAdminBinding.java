@@ -67,6 +67,9 @@ public final class ActivityAdminBinding implements ViewBinding {
   @NonNull
   public final MaterialButton setLauncherBtn;
 
+  @NonNull
+  public final TextView versionText;
+
   private ActivityAdminBinding(@NonNull NestedScrollView rootView,
       @NonNull MaterialButton backToKioskBtn, @NonNull MaterialButton btnChangePin,
       @NonNull MaterialButton btnChangePort, @NonNull MaterialButton btnChangeServerAuth,
@@ -75,7 +78,7 @@ public final class ActivityAdminBinding implements ViewBinding {
       @NonNull TextView fileCountText, @NonNull RecyclerView filesRecyclerView,
       @NonNull MaterialButton importUsbBtn, @NonNull TextView intervalLabel,
       @NonNull Slider intervalSlider, @NonNull TextView serverUrlText,
-      @NonNull MaterialButton setLauncherBtn) {
+      @NonNull MaterialButton setLauncherBtn, @NonNull TextView versionText) {
     this.rootView = rootView;
     this.backToKioskBtn = backToKioskBtn;
     this.btnChangePin = btnChangePin;
@@ -92,6 +95,7 @@ public final class ActivityAdminBinding implements ViewBinding {
     this.intervalSlider = intervalSlider;
     this.serverUrlText = serverUrlText;
     this.setLauncherBtn = setLauncherBtn;
+    this.versionText = versionText;
   }
 
   @Override
@@ -211,10 +215,16 @@ public final class ActivityAdminBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.versionText;
+      TextView versionText = ViewBindings.findChildViewById(rootView, id);
+      if (versionText == null) {
+        break missingId;
+      }
+
       return new ActivityAdminBinding((NestedScrollView) rootView, backToKioskBtn, btnChangePin,
           btnChangePort, btnChangeServerAuth, btnDeleteSelected, btnOrientLandscape,
           btnOrientPortrait, btnOrientSensor, fileCountText, filesRecyclerView, importUsbBtn,
-          intervalLabel, intervalSlider, serverUrlText, setLauncherBtn);
+          intervalLabel, intervalSlider, serverUrlText, setLauncherBtn, versionText);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

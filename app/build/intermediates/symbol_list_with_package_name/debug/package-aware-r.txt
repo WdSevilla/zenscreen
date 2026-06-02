@@ -3809,6 +3809,7 @@ id uniform
 id unlabeled
 id up
 id useLogo
+id versionText
 id vertical_only
 id videoPlayerView
 id video_decoder_gl_surface_view

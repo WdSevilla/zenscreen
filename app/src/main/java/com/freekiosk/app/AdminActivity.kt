@@ -40,6 +40,7 @@ class AdminActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setupVersion()
         setupServerUrl()
         setupFilesList()
         refreshFileList()
@@ -54,6 +55,12 @@ class AdminActivity : AppCompatActivity() {
         refreshFileList()
         setupServerUrl()
         updateLauncherButton()
+    }
+
+    private fun setupVersion() {
+        val pInfo = packageManager.getPackageInfo(packageName, 0)
+        @Suppress("DEPRECATION")
+        binding.versionText.text = "ZenScreen v${pInfo.versionName} (build ${pInfo.versionCode})"
     }
 
     private fun setupServerUrl() {

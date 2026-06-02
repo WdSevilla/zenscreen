@@ -28,10 +28,6 @@
         "source": "/Users/wil/.gradle/daemon/8.4/com.freekiosk.app-main-37:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.freekiosk.app-merged_res-35:/layout_activity_kiosk.xml.flat",
-        "source": "com.freekiosk.app-main-37:/layout/activity_kiosk.xml"
-    },
-    {
         "merged": "/Users/wil/.gradle/daemon/8.4/com.freekiosk.app-merged_res-35:/layout_activity_admin.xml.flat",
         "source": "/Users/wil/.gradle/daemon/8.4/com.freekiosk.app-main-37:/layout/activity_admin.xml"
     },
@@ -42,5 +38,9 @@
     {
         "merged": "/Users/wil/.gradle/daemon/8.4/com.freekiosk.app-merged_res-35:/mipmap-hdpi_ic_launcher.png.flat",
         "source": "/Users/wil/.gradle/daemon/8.4/com.freekiosk.app-main-37:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.freekiosk.app-merged_res-35:/layout_activity_admin.xml.flat",
+        "source": "com.freekiosk.app-main-37:/layout/activity_admin.xml"
     }
 ]

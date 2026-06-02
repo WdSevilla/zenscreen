@@ -29,6 +29,7 @@ id pdfImageView
 id pinInput
 id serverUrlText
 id setLauncherBtn
+id versionText
 id videoPlayerView
 layout activity_admin
 layout activity_kiosk
