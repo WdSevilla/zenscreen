@@ -1,14 +1,21 @@
 package com.freekiosk.app
 
+import android.content.Context
+import android.util.Base64
 import fi.iki.elonen.NanoHTTPD
 import java.io.File
 
 class WifiServer(
     port: Int,
-    private val pdfsDir: File
+    private val pdfsDir: File,
+    private val context: Context
 ) : NanoHTTPD(port) {
 
     override fun serve(session: IHTTPSession): Response {
+        // Verificar autenticación en todas las rutas
+        val authResponse = checkAuth(session)
+        if (authResponse != null) return authResponse
+
         return when {
             session.method == Method.GET && session.uri == "/" -> serveDashboard()
             session.method == Method.POST && session.uri == "/upload" -> handleUpload(session)
@@ -16,6 +23,23 @@ class WifiServer(
             session.method == Method.GET && session.uri == "/api/files" -> serveFileList()
             else -> newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not found")
         }
+    }
+
+    private fun checkAuth(session: IHTTPSession): Response? {
+        val user = Prefs.getServerUser(context)
+        val pass = Prefs.getServerPass(context)
+        val expected = "Basic " + Base64.encodeToString(
+            "$user:$pass".toByteArray(), Base64.NO_WRAP
+        )
+        val provided = session.headers["authorization"] ?: ""
+        if (provided != expected) {
+            val res = newFixedLengthResponse(
+                Response.Status.UNAUTHORIZED, MIME_PLAINTEXT, "Acceso no autorizado"
+            )
+            res.addHeader("WWW-Authenticate", "Basic realm=\"ZenScreen\"")
+            return res
+        }
+        return null
     }
 
     private fun serveDashboard(): Response {

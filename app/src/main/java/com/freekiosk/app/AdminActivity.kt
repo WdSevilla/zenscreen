@@ -128,6 +128,7 @@ class AdminActivity : AppCompatActivity() {
     private fun setupAdvancedSettings() {
         binding.btnChangePin.setOnClickListener { showChangePinDialog() }
         binding.btnChangePort.setOnClickListener { showChangePortDialog() }
+        binding.btnChangeServerAuth.setOnClickListener { showChangeServerAuthDialog() }
     }
 
     private fun showChangePinDialog() {
@@ -211,6 +212,51 @@ class AdminActivity : AppCompatActivity() {
                         restartServer()
                         setupServerUrl()
                         toast("Servidor reiniciado en puerto $port")
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun showChangeServerAuthDialog() {
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(48, 24, 48, 8)
+        }
+        val userInput = EditText(this).apply {
+            hint = "Usuario"
+            inputType = android.text.InputType.TYPE_CLASS_TEXT
+            setText(Prefs.getServerUser(this@AdminActivity))
+        }
+        val passInput = EditText(this).apply {
+            hint = "Contraseña"
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or
+                    android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        val note = TextView(this).apply {
+            text = "Usuario actual: ${Prefs.getServerUser(this@AdminActivity)}\nDeja la contraseña vacía para mantener la actual."
+            textSize = 12f
+            setTextColor(0xFF64748b.toInt())
+            setPadding(0, 8, 0, 0)
+        }
+        layout.addView(userInput)
+        layout.addView(passInput)
+        layout.addView(note)
+
+        AlertDialog.Builder(this)
+            .setTitle("Credenciales del servidor WiFi")
+            .setView(layout)
+            .setPositiveButton("Guardar") { _, _ ->
+                val user = userInput.text.toString().trim()
+                val pass = passInput.text.toString()
+                when {
+                    user.isEmpty() ->
+                        toast("El usuario no puede estar vacío")
+                    else -> {
+                        Prefs.setServerUser(this, user)
+                        if (pass.isNotEmpty()) Prefs.setServerPass(this, pass)
+                        toast("Credenciales actualizadas")
                     }
                 }
             }

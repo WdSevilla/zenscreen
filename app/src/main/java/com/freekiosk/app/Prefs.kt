@@ -7,6 +7,8 @@ object Prefs {
     const val DEFAULT_PIN = "1234"
     const val DEFAULT_INTERVAL_SECONDS = 10L
     const val DEFAULT_SERVER_PORT = 8080
+    const val DEFAULT_SERVER_USER = "admin"
+    const val DEFAULT_SERVER_PASS = "zenscreen"
 
     // Valores posibles: "portrait", "landscape", "sensor"
     const val DEFAULT_ORIENTATION = "portrait"
@@ -16,6 +18,8 @@ object Prefs {
     private const val KEY_INTERVAL = "slideshow_interval"
     private const val KEY_ORIENTATION = "orientation"
     private const val KEY_SERVER_PORT = "server_port"
+    private const val KEY_SERVER_USER = "server_user"
+    private const val KEY_SERVER_PASS = "server_pass"
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
@@ -43,4 +47,16 @@ object Prefs {
 
     fun setServerPort(context: Context, port: Int) =
         prefs(context).edit().putInt(KEY_SERVER_PORT, port).apply()
+
+    fun getServerUser(context: Context): String =
+        prefs(context).getString(KEY_SERVER_USER, DEFAULT_SERVER_USER) ?: DEFAULT_SERVER_USER
+
+    fun setServerUser(context: Context, user: String) =
+        prefs(context).edit().putString(KEY_SERVER_USER, user).apply()
+
+    fun getServerPass(context: Context): String =
+        prefs(context).getString(KEY_SERVER_PASS, DEFAULT_SERVER_PASS) ?: DEFAULT_SERVER_PASS
+
+    fun setServerPass(context: Context, pass: String) =
+        prefs(context).edit().putString(KEY_SERVER_PASS, pass).apply()
 }

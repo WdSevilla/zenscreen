@@ -214,6 +214,15 @@
                 android:layout_height="wrap_content"
                 android:text="🌐  Cambiar puerto del servidor WiFi"
                 android:textColor="#e2e8f0"
+                android:backgroundTint="#22263a"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnChangeServerAuth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="👤  Cambiar usuario y contraseña WiFi"
+                android:textColor="#e2e8f0"
                 android:backgroundTint="#22263a" />
 
         </LinearLayout>

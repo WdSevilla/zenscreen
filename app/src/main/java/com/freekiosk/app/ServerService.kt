@@ -36,7 +36,7 @@ class ServerService : Service() {
         }
         if (server == null || !server!!.isAlive) {
             val pdfsDir = FileManager.getPdfsDir(this)
-            server = WifiServer(port, pdfsDir).also { it.start() }
+            server = WifiServer(port, pdfsDir, this).also { it.start() }
         }
         startForeground(NOTIF_ID, buildNotification())
         return START_STICKY
