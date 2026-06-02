@@ -25,6 +25,15 @@ public final class ActivityAdminBinding implements ViewBinding {
   public final MaterialButton backToKioskBtn;
 
   @NonNull
+  public final MaterialButton btnChangePin;
+
+  @NonNull
+  public final MaterialButton btnChangePort;
+
+  @NonNull
+  public final MaterialButton btnChangeServerAuth;
+
+  @NonNull
   public final MaterialButton btnOrientLandscape;
 
   @NonNull
@@ -48,13 +57,21 @@ public final class ActivityAdminBinding implements ViewBinding {
   @NonNull
   public final TextView serverUrlText;
 
+  @NonNull
+  public final MaterialButton setLauncherBtn;
+
   private ActivityAdminBinding(@NonNull ScrollView rootView, @NonNull MaterialButton backToKioskBtn,
-      @NonNull MaterialButton btnOrientLandscape, @NonNull MaterialButton btnOrientPortrait,
-      @NonNull MaterialButton btnOrientSensor, @NonNull TextView fileCountText,
-      @NonNull MaterialButton importUsbBtn, @NonNull TextView intervalLabel,
-      @NonNull Slider intervalSlider, @NonNull TextView serverUrlText) {
+      @NonNull MaterialButton btnChangePin, @NonNull MaterialButton btnChangePort,
+      @NonNull MaterialButton btnChangeServerAuth, @NonNull MaterialButton btnOrientLandscape,
+      @NonNull MaterialButton btnOrientPortrait, @NonNull MaterialButton btnOrientSensor,
+      @NonNull TextView fileCountText, @NonNull MaterialButton importUsbBtn,
+      @NonNull TextView intervalLabel, @NonNull Slider intervalSlider,
+      @NonNull TextView serverUrlText, @NonNull MaterialButton setLauncherBtn) {
     this.rootView = rootView;
     this.backToKioskBtn = backToKioskBtn;
+    this.btnChangePin = btnChangePin;
+    this.btnChangePort = btnChangePort;
+    this.btnChangeServerAuth = btnChangeServerAuth;
     this.btnOrientLandscape = btnOrientLandscape;
     this.btnOrientPortrait = btnOrientPortrait;
     this.btnOrientSensor = btnOrientSensor;
@@ -63,6 +80,7 @@ public final class ActivityAdminBinding implements ViewBinding {
     this.intervalLabel = intervalLabel;
     this.intervalSlider = intervalSlider;
     this.serverUrlText = serverUrlText;
+    this.setLauncherBtn = setLauncherBtn;
   }
 
   @Override
@@ -95,6 +113,24 @@ public final class ActivityAdminBinding implements ViewBinding {
       id = R.id.backToKioskBtn;
       MaterialButton backToKioskBtn = ViewBindings.findChildViewById(rootView, id);
       if (backToKioskBtn == null) {
+        break missingId;
+      }
+
+      id = R.id.btnChangePin;
+      MaterialButton btnChangePin = ViewBindings.findChildViewById(rootView, id);
+      if (btnChangePin == null) {
+        break missingId;
+      }
+
+      id = R.id.btnChangePort;
+      MaterialButton btnChangePort = ViewBindings.findChildViewById(rootView, id);
+      if (btnChangePort == null) {
+        break missingId;
+      }
+
+      id = R.id.btnChangeServerAuth;
+      MaterialButton btnChangeServerAuth = ViewBindings.findChildViewById(rootView, id);
+      if (btnChangeServerAuth == null) {
         break missingId;
       }
 
@@ -146,9 +182,16 @@ public final class ActivityAdminBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityAdminBinding((ScrollView) rootView, backToKioskBtn, btnOrientLandscape,
-          btnOrientPortrait, btnOrientSensor, fileCountText, importUsbBtn, intervalLabel,
-          intervalSlider, serverUrlText);
+      id = R.id.setLauncherBtn;
+      MaterialButton setLauncherBtn = ViewBindings.findChildViewById(rootView, id);
+      if (setLauncherBtn == null) {
+        break missingId;
+      }
+
+      return new ActivityAdminBinding((ScrollView) rootView, backToKioskBtn, btnChangePin,
+          btnChangePort, btnChangeServerAuth, btnOrientLandscape, btnOrientPortrait,
+          btnOrientSensor, fileCountText, importUsbBtn, intervalLabel, intervalSlider,
+          serverUrlText, setLauncherBtn);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

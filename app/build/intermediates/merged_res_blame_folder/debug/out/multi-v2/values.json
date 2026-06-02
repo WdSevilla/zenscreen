@@ -4,7 +4,7 @@
             "outputFile": "com.freekiosk.app-mergeDebugResources-29:/values/values.xml",
             "map": [
                 {
-                    "source": "/Users/wil/Documents/vibe-projects/freekiosk-android/app/src/main/res/values/colors.xml",
+                    "source": "/Users/wil/Documents/vibe-projects/zenscreen/app/src/main/res/values/colors.xml",
                     "from": {
                         "startLines": "3,1,5,2,4",
                         "startColumns": "4,4,4,4,4",
@@ -37,23 +37,6 @@
                         "endLines": "9291,9297,9307,12837,12841",
                         "endColumns": "24,24,24,24,24",
                         "endOffsets": "640887,641065,641349,771665,771792"
-                    }
-                },
-                {
-                    "source": "/Users/wil/Documents/vibe-projects/freekiosk-android/app/src/main/res/values/strings.xml",
-                    "from": {
-                        "startLines": "1,4,3,2",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "16,162,116,63",
-                        "endColumns": "46,43,45,52",
-                        "endOffsets": "58,201,157,111"
-                    },
-                    "to": {
-                        "startLines": "1971,1986,1991,2113",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "130495,132292,132713,150068",
-                        "endColumns": "46,43,45,52",
-                        "endOffsets": "130537,132331,132754,150116"
                     }
                 },
                 {
@@ -169,25 +152,6 @@
                     }
                 },
                 {
-                    "source": "/Users/wil/Documents/vibe-projects/freekiosk-android/app/src/main/res/values/themes.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "7",
-                        "endColumns": "12",
-                        "endOffsets": "380"
-                    },
-                    "to": {
-                        "startLines": "6519",
-                        "startColumns": "4",
-                        "startOffsets": "457823",
-                        "endLines": "6524",
-                        "endColumns": "12",
-                        "endOffsets": "458148"
-                    }
-                },
-                {
                     "source": "/Users/wil/.gradle/caches/transforms-3/2243179c468138e35195f2c9dc4a5a4a/transformed/jetified-activity-1.8.0/res/values/values.xml",
                     "from": {
                         "startLines": "2,3",
@@ -236,6 +200,42 @@
                         "startOffsets": "120101,120141,121273,121497,121552,123048,123102,123154,123203,123264",
                         "endColumns": "39,46,42,54,46,53,51,48,60,49",
                         "endOffsets": "120136,120183,121311,121547,121594,123097,123149,123198,123259,123309"
+                    }
+                },
+                {
+                    "source": "/Users/wil/Documents/vibe-projects/zenscreen/app/src/main/res/values/strings.xml",
+                    "from": {
+                        "startLines": "1,4,3,2",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "16,162,116,63",
+                        "endColumns": "46,43,45,52",
+                        "endOffsets": "58,201,157,111"
+                    },
+                    "to": {
+                        "startLines": "1971,1986,1991,2113",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "130495,132292,132713,150068",
+                        "endColumns": "46,43,45,52",
+                        "endOffsets": "130537,132331,132754,150116"
+                    }
+                },
+                {
+                    "source": "/Users/wil/Documents/vibe-projects/zenscreen/app/src/main/res/values/themes.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "7",
+                        "endColumns": "12",
+                        "endOffsets": "380"
+                    },
+                    "to": {
+                        "startLines": "6519",
+                        "startColumns": "4",
+                        "startOffsets": "457823",
+                        "endLines": "6524",
+                        "endColumns": "12",
+                        "endOffsets": "458148"
                     }
                 },
                 {

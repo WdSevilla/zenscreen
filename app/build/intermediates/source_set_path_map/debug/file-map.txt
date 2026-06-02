@@ -25,10 +25,10 @@ com.freekiosk.app-lifecycle-livedata-2.6.1-23 /Users/wil/.gradle/caches/transfor
 com.freekiosk.app-drawerlayout-1.1.1-24 /Users/wil/.gradle/caches/transforms-3/d9eab32007ceed9c2c86fb63a3643f3f/transformed/drawerlayout-1.1.1/res
 com.freekiosk.app-recyclerview-1.1.0-25 /Users/wil/.gradle/caches/transforms-3/dc41572825b713afd393bf58e65d34e3/transformed/recyclerview-1.1.0/res
 com.freekiosk.app-lifecycle-viewmodel-2.6.1-26 /Users/wil/.gradle/caches/transforms-3/e6430949db14131dee80ad7be268590f/transformed/lifecycle-viewmodel-2.6.1/res
-com.freekiosk.app-pngs-27 /Users/wil/Documents/vibe-projects/freekiosk-android/app/build/generated/res/pngs/debug
-com.freekiosk.app-resValues-28 /Users/wil/Documents/vibe-projects/freekiosk-android/app/build/generated/res/resValues/debug
-com.freekiosk.app-packageDebugResources-29 /Users/wil/Documents/vibe-projects/freekiosk-android/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
-com.freekiosk.app-packageDebugResources-30 /Users/wil/Documents/vibe-projects/freekiosk-android/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
-com.freekiosk.app-merged_res-31 /Users/wil/Documents/vibe-projects/freekiosk-android/app/build/intermediates/merged_res/debug
-com.freekiosk.app-debug-32 /Users/wil/Documents/vibe-projects/freekiosk-android/app/src/debug/res
-com.freekiosk.app-main-33 /Users/wil/Documents/vibe-projects/freekiosk-android/app/src/main/res
+com.freekiosk.app-pngs-27 /Users/wil/Documents/vibe-projects/zenscreen/app/build/generated/res/pngs/debug
+com.freekiosk.app-resValues-28 /Users/wil/Documents/vibe-projects/zenscreen/app/build/generated/res/resValues/debug
+com.freekiosk.app-packageDebugResources-29 /Users/wil/Documents/vibe-projects/zenscreen/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.freekiosk.app-packageDebugResources-30 /Users/wil/Documents/vibe-projects/zenscreen/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.freekiosk.app-merged_res-31 /Users/wil/Documents/vibe-projects/zenscreen/app/build/intermediates/merged_res/debug
+com.freekiosk.app-debug-32 /Users/wil/Documents/vibe-projects/zenscreen/app/src/debug/res
+com.freekiosk.app-main-33 /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/res

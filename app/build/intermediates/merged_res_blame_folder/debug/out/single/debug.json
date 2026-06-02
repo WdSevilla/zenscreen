@@ -8,6 +8,10 @@
         "source": "com.freekiosk.app-main-33:/mipmap-mdpi/ic_launcher.png"
     },
     {
+        "merged": "com.freekiosk.app-merged_res-31:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.freekiosk.app-main-33:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
         "merged": "com.freekiosk.app-merged_res-31:/layout_dialog_pin.xml.flat",
         "source": "com.freekiosk.app-main-33:/layout/dialog_pin.xml"
     },
