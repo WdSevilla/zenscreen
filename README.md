@@ -27,11 +27,14 @@ Pensada para tabletas fijas en **recepciones, salas de espera, exhibiciones o pu
 
 - 📄 **Slideshow de PDFs, imágenes y videos** en bucle infinito
 - ⏱️ **Duración variable** — PDFs e imágenes usan el intervalo configurado; videos duran lo que dura el video
-- 👆 **Toque para avanzar** manualmente (también salta videos)
+- 👆 **Navegación táctil** — toca la mitad derecha para avanzar, mitad izquierda para retroceder
+- ✨ **Transiciones suaves** — fade in al cambiar de slide
+- 🗂️ **Orden del playlist configurable** — arrastra archivos en el panel admin o en la web WiFi
+- 🗑️ **Gestión de archivos desde la app** — selección múltiple y borrado desde el panel admin
 - 🔒 **Modo kiosk** — bloquea Atrás, oculta barras del sistema
 - 🏠 **Launcher integrado** — Home siempre vuelve al kiosk
 - 🔄 **Arranque automático** al encender la tablet
-- 📡 **Servidor WiFi** con autenticación — sube/elimina archivos desde el browser
+- 📡 **Servidor WiFi** con autenticación — sube, elimina y reordena archivos desde el browser
 - 🛠️ **Panel de administración** oculto con PIN
 - 🔃 **Orientación configurable** — vertical, horizontal o automática
 - 🔑 **PIN, puerto y credenciales** configurables desde la interfaz
@@ -126,6 +129,25 @@ Contraseña: zenscreen
 
 ---
 
+## Navegación táctil en el kiosk
+
+Toca la pantalla para navegar manualmente entre slides:
+
+```
+┌──────────────────────────────────────┐
+│              │                       │
+│   Toque      │     Toque             │
+│  ← Anterior  │    Siguiente →        │
+│              │                       │
+└──────────────────────────────────────┘
+```
+
+- **Mitad izquierda** → slide anterior
+- **Mitad derecha** → slide siguiente
+- En videos: también salta al siguiente/anterior sin esperar que termine
+
+---
+
 ## Panel de administración
 
 El panel es **invisible** para los usuarios — solo el administrador sabe cómo acceder.
@@ -148,13 +170,39 @@ El panel es **invisible** para los usuarios — solo el administrador sabe cómo
 
 | Sección | Descripción |
 |---------|-------------|
-| **Servidor WiFi** | URL y credenciales para subir archivos desde PC |
-| **Archivos en tablet** | Conteo por tipo (📄 PDFs · 🖼️ imágenes · 🎬 videos) + importar desde almacenamiento |
+| **Servidor WiFi** | URL para acceder al dashboard desde el browser de tu PC |
+| **Archivos en tablet** | Lista completa de archivos con opciones de gestión |
 | **Intervalo slideshow** | Slider de 3 a 60 segundos (aplica a PDFs e imágenes; videos ignoran este valor) |
 | **Orientación de pantalla** | Vertical / Horizontal / Auto |
 | **Configuración avanzada** | Cambiar PIN, puerto del servidor y credenciales WiFi |
 | **Establecer como launcher** | Abre ajustes del sistema para configurar como app de inicio |
 | **Volver al kiosk** | Cierra el panel |
+
+### Gestión de archivos desde la app
+
+En la sección **Archivos en tablet** puedes:
+
+- **Borrar un archivo** — toca el botón "Borrar" en la fila del archivo
+- **Borrar varios a la vez** — activa los checkboxes y toca "Borrar seleccionados (N)"
+- **Reordenar el playlist** — mantén pulsado el handle `⠿` de una fila y arrástrala a la posición deseada; el orden se guarda automáticamente
+
+---
+
+## Servidor WiFi — Dashboard
+
+Desde el browser de tu PC puedes gestionar los archivos sin tocar la tablet.
+
+### Funciones disponibles
+
+| Función | Cómo usarla |
+|---------|-------------|
+| **Subir archivos** | Arrastra archivos al área punteada o toca para seleccionar |
+| **Borrar un archivo** | Botón "Borrar" en la fila del archivo |
+| **Borrar varios** | Activa checkboxes → aparece "Borrar seleccionados (N)" |
+| **Seleccionar todo** | Botón "Seleccionar todo" |
+| **Reordenar playlist** | Arrastra el handle `⠿` de una fila a la posición deseada — se guarda automáticamente |
+
+El orden que definas aquí (o en la app) es el mismo que usa el slideshow.
 
 ---
 
@@ -195,17 +243,21 @@ zenscreen/
 │   ├── MainActivity.kt          # Entry point: permisos → launcher → kiosk
 │   ├── KioskActivity.kt         # Pantalla principal: slideshow PDF/imagen/video
 │   ├── AdminActivity.kt         # Panel de configuración con PIN
+│   ├── MediaFileAdapter.kt      # RecyclerView adapter: checkboxes + drag & drop
 │   ├── PinDialogFragment.kt     # Diálogo de PIN
 │   ├── ServerService.kt         # Foreground service: mantiene servidor activo
 │   ├── WifiServer.kt            # NanoHTTPD: dashboard HTML + API + Basic Auth
 │   ├── BootReceiver.kt          # BroadcastReceiver: auto-start al encender
 │   ├── PdfPageRenderer.kt       # Wrapper de Android PdfRenderer
-│   ├── SlideshowManager.kt      # Navegación circular entre archivos
-│   ├── FileManager.kt           # MediaType, MediaFile, listMedia(), saveMedia()
-│   └── Prefs.kt                 # SharedPreferences: toda la configuración
+│   ├── SlideshowManager.kt      # Navegación circular entre archivos (next/prev/seekTo)
+│   ├── FileManager.kt           # MediaType, MediaFile, listMediaOrdered()
+│   └── Prefs.kt                 # SharedPreferences: configuración + orden del playlist
 └── app/src/main/res/
-    ├── layout/                  # Layouts XML
-    └── values/                  # Strings, colores, temas
+    ├── layout/
+    │   ├── activity_kiosk.xml
+    │   ├── activity_admin.xml
+    │   └── item_media_file.xml  # Fila del RecyclerView: handle + checkbox + nombre + borrar
+    └── values/
 ```
 
 ### Flujo al encender
@@ -215,21 +267,24 @@ Encendido
   └── BootReceiver
         ├── Inicia ServerService  →  NanoHTTPD en puerto configurado
         └── Abre KioskActivity
-              ├── Carga PDFs/imágenes/videos desde /pdfs/
-              ├── PDF/Imagen  →  renderiza + timer configurable
-              ├── Video       →  ExoPlayer, avanza al terminar
-              ├── Toque pantalla  →  salta al siguiente
+              ├── Carga archivos en el orden guardado (Prefs.getPlaylistOrder)
+              ├── PDF/Imagen  →  renderiza + fade in + timer configurable
+              ├── Video       →  ExoPlayer + fade in al STATE_READY, avanza al terminar
+              ├── Tap derecho →  siguiente  |  Tap izquierdo →  anterior
               └── Toque largo esquina  →  PIN  →  AdminActivity
+                    └── Al volver: retoma el mismo archivo (no reinicia desde 0)
 ```
 
 ### API del servidor WiFi
 
 | Endpoint | Método | Auth | Descripción |
 |----------|--------|------|-------------|
-| `/` | GET | ✅ | Dashboard HTML |
-| `/api/files` | GET | ✅ | Lista archivos con tipo e ícono en JSON |
+| `/` | GET | ✅ | Dashboard HTML con gestión completa |
+| `/api/files` | GET | ✅ | Lista archivos en el orden guardado (JSON) |
 | `/upload` | POST | ✅ | Subir PDF, imagen o video (multipart) |
-| `/delete` | POST | ✅ | Eliminar archivo por nombre |
+| `/delete` | POST | ✅ | Eliminar un archivo por nombre |
+| `/delete-bulk` | POST | ✅ | Eliminar varios archivos (JSON array) |
+| `/reorder` | POST | ✅ | Guardar nuevo orden del playlist (JSON array) |
 
 ---
 
@@ -257,6 +312,10 @@ Encendido
 - Videos muy grandes pueden tardar en cargar — es normal
 - Si el video está corrupto, el slideshow avanza automáticamente al siguiente archivo
 
+### Al volver del panel admin el slideshow reinicia desde el principio
+- Esto era un bug conocido — corregido en la versión actual
+- Si persiste, verifica que el archivo que se estaba mostrando aún exista en la tablet
+
 ### Build falla con "defined multiple times"
 macOS crea duplicados al copiar/mover carpetas. Solución:
 ```bash
@@ -281,8 +340,9 @@ find app/build -name "* 2.*" -delete
 | NanoHTTPD | 2.3.1 | Servidor HTTP embebido |
 | Kotlinx Coroutines | 1.7.3 | Slideshow timer y renders async |
 | Material Components | 1.11.0 | UI del panel admin |
+| RecyclerView + ItemTouchHelper | — | Lista de archivos con drag & drop |
 | ViewBinding | — | Acceso a vistas |
-| SharedPreferences | — | Persistencia de configuración |
+| SharedPreferences | — | Persistencia de configuración y orden del playlist |
 
 ---
 

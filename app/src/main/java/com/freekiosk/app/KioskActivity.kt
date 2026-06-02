@@ -48,6 +48,8 @@ class KioskActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        slideshowJob?.cancel()
+        renderJob?.cancel()
         exoPlayer?.pause()
     }
 
@@ -93,11 +95,17 @@ class KioskActivity : AppCompatActivity() {
     // ── Slideshow ────────────────────────────────────────────────────────────
 
     private fun reloadAndStart() {
-        // Mover I/O de archivos fuera del hilo principal
+        // Capturar antes de cualquier suspensión para que el timer no interfiera
+        val currentName = if (!slideshow.isEmpty()) slideshow.current().file.name else null
         scope.launch {
             val dir   = withContext(Dispatchers.IO) { FileManager.getPdfsDir(this@KioskActivity) }
-            val files = withContext(Dispatchers.IO) { FileManager.listMedia(dir) }
+            val order = Prefs.getPlaylistOrder(this@KioskActivity)
+            val files = withContext(Dispatchers.IO) { FileManager.listMediaOrdered(dir, order) }
             slideshow.reload(files)
+            if (currentName != null) {
+                val idx = files.indexOfFirst { it.file.name == currentName }
+                if (idx >= 0) slideshow.seekTo(idx)
+            }
 
             if (slideshow.isEmpty()) {
                 binding.emptyText.visibility = View.VISIBLE
@@ -144,6 +152,7 @@ class KioskActivity : AppCompatActivity() {
                     val bitmap = renderer.renderPage(0, w, h)
                     if (isActive) withContext(Dispatchers.Main) {
                         binding.pdfImageView.setImageBitmap(bitmap)
+                        fadeInImage()
                     }
                 } catch (e: Exception) {
                     if (isActive) withContext(Dispatchers.Main) { advance() }
@@ -176,6 +185,7 @@ class KioskActivity : AppCompatActivity() {
                     val bitmap = BitmapFactory.decodeFile(file.absolutePath, opts)
                     if (isActive && bitmap != null) withContext(Dispatchers.Main) {
                         binding.pdfImageView.setImageBitmap(bitmap)
+                        fadeInImage()
                     } else if (isActive) {
                         withContext(Dispatchers.Main) { advance() }
                     }
@@ -220,7 +230,10 @@ class KioskActivity : AppCompatActivity() {
 
         player.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(state: Int) {
-                if (state == Player.STATE_ENDED) advance()
+                when (state) {
+                    Player.STATE_READY -> fadeInVideo()
+                    Player.STATE_ENDED -> advance()
+                }
             }
         })
 
@@ -242,13 +255,24 @@ class KioskActivity : AppCompatActivity() {
     // ── Vistas ───────────────────────────────────────────────────────────────
 
     private fun showImageView() {
+        binding.pdfImageView.setImageBitmap(null)
+        binding.pdfImageView.alpha = 0f
         binding.pdfImageView.visibility = View.VISIBLE
         binding.videoPlayerView.visibility = View.GONE
     }
 
+    private fun fadeInImage() {
+        binding.pdfImageView.animate().alpha(1f).setDuration(400).start()
+    }
+
     private fun showVideoView() {
+        binding.videoPlayerView.alpha = 0f
         binding.pdfImageView.visibility = View.GONE
         binding.videoPlayerView.visibility = View.VISIBLE
+    }
+
+    private fun fadeInVideo() {
+        binding.videoPlayerView.animate().alpha(1f).setDuration(400).start()
     }
 
     // ── Timer (PDF e imagen) ─────────────────────────────────────────────────
@@ -270,14 +294,31 @@ class KioskActivity : AppCompatActivity() {
     // ── Navegación táctil ────────────────────────────────────────────────────
 
     private fun setupTapToAdvance() {
-        binding.pdfImageView.setOnClickListener {
+        val tapListener = android.view.View.OnClickListener { v ->
             slideshowJob?.cancel()
-            advance()
+            val mid = v.width / 2f
+            // El último evento de toque se lee desde el root para obtener la X
+            val x = lastTouchX
+            if (x < mid) goBack() else advance()
         }
-        binding.videoPlayerView.setOnClickListener {
-            slideshowJob?.cancel()
-            advance()
+        binding.pdfImageView.setOnClickListener(tapListener)
+        binding.videoPlayerView.setOnClickListener(tapListener)
+
+        val touchListener = android.view.View.OnTouchListener { _, event ->
+            if (event.actionMasked == android.view.MotionEvent.ACTION_DOWN) {
+                lastTouchX = event.x
+            }
+            false
         }
+        binding.pdfImageView.setOnTouchListener(touchListener)
+        binding.videoPlayerView.setOnTouchListener(touchListener)
+    }
+
+    private var lastTouchX = 0f
+
+    private fun goBack() {
+        slideshow.prev()
+        renderCurrent()
     }
 
     private fun setupLongPressAdmin() {

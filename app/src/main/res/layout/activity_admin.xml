@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0f1117"
@@ -78,7 +78,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Importar desde almacenamiento"
-                android:backgroundTint="#22263a" />
+                android:backgroundTint="#22263a"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeleteSelected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Borrar seleccionados (0)"
+                android:backgroundTint="#7f1d1d"
+                android:textColor="#fca5a5"
+                android:visibility="gone"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⠿ Mantén y arrastra para reordenar"
+                android:textColor="#3d4460"
+                android:textSize="11sp"
+                android:layout_marginTop="8dp" />
+
         </LinearLayout>
 
         <!-- Intervalo slideshow -->
@@ -245,4 +272,4 @@
             android:layout_marginTop="8dp" />
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

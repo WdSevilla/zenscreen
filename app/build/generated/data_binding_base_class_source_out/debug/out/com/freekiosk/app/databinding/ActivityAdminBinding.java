@@ -4,10 +4,11 @@ package com.freekiosk.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.freekiosk.app.R;
@@ -19,7 +20,7 @@ import java.lang.String;
 
 public final class ActivityAdminBinding implements ViewBinding {
   @NonNull
-  private final ScrollView rootView;
+  private final NestedScrollView rootView;
 
   @NonNull
   public final MaterialButton backToKioskBtn;
@@ -34,6 +35,9 @@ public final class ActivityAdminBinding implements ViewBinding {
   public final MaterialButton btnChangeServerAuth;
 
   @NonNull
+  public final MaterialButton btnDeleteSelected;
+
+  @NonNull
   public final MaterialButton btnOrientLandscape;
 
   @NonNull
@@ -44,6 +48,9 @@ public final class ActivityAdminBinding implements ViewBinding {
 
   @NonNull
   public final TextView fileCountText;
+
+  @NonNull
+  public final RecyclerView filesRecyclerView;
 
   @NonNull
   public final MaterialButton importUsbBtn;
@@ -60,22 +67,26 @@ public final class ActivityAdminBinding implements ViewBinding {
   @NonNull
   public final MaterialButton setLauncherBtn;
 
-  private ActivityAdminBinding(@NonNull ScrollView rootView, @NonNull MaterialButton backToKioskBtn,
-      @NonNull MaterialButton btnChangePin, @NonNull MaterialButton btnChangePort,
-      @NonNull MaterialButton btnChangeServerAuth, @NonNull MaterialButton btnOrientLandscape,
+  private ActivityAdminBinding(@NonNull NestedScrollView rootView,
+      @NonNull MaterialButton backToKioskBtn, @NonNull MaterialButton btnChangePin,
+      @NonNull MaterialButton btnChangePort, @NonNull MaterialButton btnChangeServerAuth,
+      @NonNull MaterialButton btnDeleteSelected, @NonNull MaterialButton btnOrientLandscape,
       @NonNull MaterialButton btnOrientPortrait, @NonNull MaterialButton btnOrientSensor,
-      @NonNull TextView fileCountText, @NonNull MaterialButton importUsbBtn,
-      @NonNull TextView intervalLabel, @NonNull Slider intervalSlider,
-      @NonNull TextView serverUrlText, @NonNull MaterialButton setLauncherBtn) {
+      @NonNull TextView fileCountText, @NonNull RecyclerView filesRecyclerView,
+      @NonNull MaterialButton importUsbBtn, @NonNull TextView intervalLabel,
+      @NonNull Slider intervalSlider, @NonNull TextView serverUrlText,
+      @NonNull MaterialButton setLauncherBtn) {
     this.rootView = rootView;
     this.backToKioskBtn = backToKioskBtn;
     this.btnChangePin = btnChangePin;
     this.btnChangePort = btnChangePort;
     this.btnChangeServerAuth = btnChangeServerAuth;
+    this.btnDeleteSelected = btnDeleteSelected;
     this.btnOrientLandscape = btnOrientLandscape;
     this.btnOrientPortrait = btnOrientPortrait;
     this.btnOrientSensor = btnOrientSensor;
     this.fileCountText = fileCountText;
+    this.filesRecyclerView = filesRecyclerView;
     this.importUsbBtn = importUsbBtn;
     this.intervalLabel = intervalLabel;
     this.intervalSlider = intervalSlider;
@@ -85,7 +96,7 @@ public final class ActivityAdminBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public ScrollView getRoot() {
+  public NestedScrollView getRoot() {
     return rootView;
   }
 
@@ -134,6 +145,12 @@ public final class ActivityAdminBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnDeleteSelected;
+      MaterialButton btnDeleteSelected = ViewBindings.findChildViewById(rootView, id);
+      if (btnDeleteSelected == null) {
+        break missingId;
+      }
+
       id = R.id.btnOrientLandscape;
       MaterialButton btnOrientLandscape = ViewBindings.findChildViewById(rootView, id);
       if (btnOrientLandscape == null) {
@@ -155,6 +172,12 @@ public final class ActivityAdminBinding implements ViewBinding {
       id = R.id.fileCountText;
       TextView fileCountText = ViewBindings.findChildViewById(rootView, id);
       if (fileCountText == null) {
+        break missingId;
+      }
+
+      id = R.id.filesRecyclerView;
+      RecyclerView filesRecyclerView = ViewBindings.findChildViewById(rootView, id);
+      if (filesRecyclerView == null) {
         break missingId;
       }
 
@@ -188,10 +211,10 @@ public final class ActivityAdminBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityAdminBinding((ScrollView) rootView, backToKioskBtn, btnChangePin,
-          btnChangePort, btnChangeServerAuth, btnOrientLandscape, btnOrientPortrait,
-          btnOrientSensor, fileCountText, importUsbBtn, intervalLabel, intervalSlider,
-          serverUrlText, setLauncherBtn);
+      return new ActivityAdminBinding((NestedScrollView) rootView, backToKioskBtn, btnChangePin,
+          btnChangePort, btnChangeServerAuth, btnDeleteSelected, btnOrientLandscape,
+          btnOrientPortrait, btnOrientSensor, fileCountText, filesRecyclerView, importUsbBtn,
+          intervalLabel, intervalSlider, serverUrlText, setLauncherBtn);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

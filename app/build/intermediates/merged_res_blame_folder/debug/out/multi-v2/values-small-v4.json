@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.freekiosk.app-mergeDebugResources-29:/values-small-v4/values-small-v4.xml",
+            "outputFile": "com.freekiosk.app-mergeDebugResources-33:/values-small-v4/values-small-v4.xml",
             "map": [
                 {
                     "source": "/Users/wil/.gradle/caches/transforms-3/145650af4be7b0f3c1429ca190a0ac38/transformed/material-1.11.0/res/values-small-v4/values-small-v4.xml",

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.media3.ui.PlayerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.freekiosk.app.R;
@@ -29,12 +30,17 @@ public final class ActivityKioskBinding implements ViewBinding {
   @NonNull
   public final ImageView pdfImageView;
 
+  @NonNull
+  public final PlayerView videoPlayerView;
+
   private ActivityKioskBinding(@NonNull FrameLayout rootView, @NonNull View adminTrigger,
-      @NonNull TextView emptyText, @NonNull ImageView pdfImageView) {
+      @NonNull TextView emptyText, @NonNull ImageView pdfImageView,
+      @NonNull PlayerView videoPlayerView) {
     this.rootView = rootView;
     this.adminTrigger = adminTrigger;
     this.emptyText = emptyText;
     this.pdfImageView = pdfImageView;
+    this.videoPlayerView = videoPlayerView;
   }
 
   @Override
@@ -82,8 +88,14 @@ public final class ActivityKioskBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityKioskBinding((FrameLayout) rootView, adminTrigger, emptyText,
-          pdfImageView);
+      id = R.id.videoPlayerView;
+      PlayerView videoPlayerView = ViewBindings.findChildViewById(rootView, id);
+      if (videoPlayerView == null) {
+        break missingId;
+      }
+
+      return new ActivityKioskBinding((FrameLayout) rootView, adminTrigger, emptyText, pdfImageView,
+          videoPlayerView);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

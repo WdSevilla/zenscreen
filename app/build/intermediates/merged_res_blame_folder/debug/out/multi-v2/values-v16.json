@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.freekiosk.app-mergeDebugResources-29:/values-v16/values-v16.xml",
+            "outputFile": "com.freekiosk.app-mergeDebugResources-33:/values-v16/values-v16.xml",
             "map": [
                 {
                     "source": "/Users/wil/.gradle/caches/transforms-3/7f6d27d4124fa585f7a9b5afa5f2d766/transformed/core-1.12.0/res/values-v16/values-v16.xml",

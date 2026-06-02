@@ -17,10 +17,12 @@ class WifiServer(
         if (authResponse != null) return authResponse
 
         return when {
-            session.method == Method.GET && session.uri == "/" -> serveDashboard()
-            session.method == Method.POST && session.uri == "/upload" -> handleUpload(session)
-            session.method == Method.POST && session.uri == "/delete" -> handleDelete(session)
-            session.method == Method.GET && session.uri == "/api/files" -> serveFileList()
+            session.method == Method.GET  && session.uri == "/"             -> serveDashboard()
+            session.method == Method.POST && session.uri == "/upload"       -> handleUpload(session)
+            session.method == Method.POST && session.uri == "/delete"       -> handleDelete(session)
+            session.method == Method.POST && session.uri == "/delete-bulk"  -> handleDeleteBulk(session)
+            session.method == Method.POST && session.uri == "/reorder"      -> handleReorder(session)
+            session.method == Method.GET  && session.uri == "/api/files"    -> serveFileList()
             else -> newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not found")
         }
     }
@@ -56,12 +58,24 @@ h2{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;mar
 .drop{border:2px dashed #2d3148;border-radius:10px;padding:32px;text-align:center;cursor:pointer;position:relative}
 .drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .drop:hover{border-color:#4f8ef7}
-.file-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #2d3148}
+.file-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #2d3148;cursor:default;transition:background .15s;border-radius:6px}
 .file-row:last-child{border:none}
-.btn-del{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px}
+.file-row.drag-over{background:#1e2540;border-radius:6px}
+.file-row.dragging{opacity:.4}
+.drag-handle{cursor:grab;color:#3d4460;font-size:18px;user-select:none;padding:0 4px;flex-shrink:0}
+.drag-handle:active{cursor:grabbing}
+.chk{width:16px;height:16px;accent-color:#4f8ef7;flex-shrink:0;cursor:pointer}
+.file-info{flex:1;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-del{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;flex-shrink:0}
 .btn-del:hover{opacity:.8}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.btn-bulk{background:rgba(239,68,68,.2);color:#ef4444;border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px;display:none}
+.btn-bulk:hover{opacity:.8}
+.btn-sel-all{background:#1e2540;color:#94a3b8;border:1px solid #2d3148;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13px}
+.btn-sel-all:hover{background:#252b42}
 .status{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:8px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.order-hint{font-size:11px;color:#3d4460;margin-top:6px}
 </style></head><body>
 <h1>📺 ZenScreen · Gestión WiFi</h1>
 <div class="card">
@@ -69,7 +83,7 @@ h2{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;mar
   <p style="color:#64748b;font-size:13px">Archivos en la tablet</p>
 </div>
 <div class="card">
-  <h2>Subir PDFs</h2>
+  <h2>Subir archivos</h2>
   <div class="drop">
     <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp,.mp4,.mkv,.mov,.avi,.webm" multiple onchange="upload(this.files)">
     <p style="color:#64748b">Arrastra archivos aquí o toca para seleccionar<br><small style="font-size:10px">PDF · JPG · PNG · WebP · MP4 · MKV · MOV</small></p>
@@ -77,20 +91,91 @@ h2{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;mar
 </div>
 <div class="card">
   <h2>Archivos (<span id="count">...</span>)</h2>
+  <div class="toolbar">
+    <button class="btn-sel-all" onclick="toggleAll()">Seleccionar todo</button>
+    <button class="btn-bulk" id="btnBulk" onclick="delSelected()">Borrar seleccionados (<span id="selCount">0</span>)</button>
+  </div>
   <div id="list">Cargando...</div>
+  <p class="order-hint">⠿ Arrastra las filas para cambiar el orden del slideshow</p>
 </div>
 <script>
+let dragSrc=null;
+
+function buildList(files){
+  if(files.length===0) return '<p style="color:#64748b;font-size:13px">Sin archivos todavía</p>';
+  return files.map(f=>`<div class="file-row" draggable="true" data-name="${'$'}{esc(f.name)}">
+    <span class="drag-handle" title="Arrastrar para reordenar">⠿</span>
+    <input type="checkbox" class="chk" value="${'$'}{esc(f.name)}" onchange="updateBulkBtn()">
+    <span class="file-info">${'$'}{f.icon} ${'$'}{esc(f.name)} <span style="color:#64748b;font-size:11px">(${'$'}{(f.size/1024).toFixed(1)} KB)</span></span>
+    <button class="btn-del" onclick="del('${'$'}{esc(f.name)}')">Borrar</button>
+  </div>`).join('');
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
 async function load(){
   const r=await fetch('/api/files');
   const d=await r.json();
   document.getElementById('count').textContent=d.files.length;
-  document.getElementById('list').innerHTML=d.files.length===0
-    ?'<p style="color:#64748b;font-size:13px">Sin archivos todavía</p>'
-    :d.files.map(f=>`<div class="file-row">
-      <span style="font-size:14px">📄 ${'$'}{f.name} <span style="color:#64748b;font-size:11px">(${'$'}{(f.size/1024).toFixed(1)} KB)</span></span>
-      <button class="btn-del" onclick="del('${'$'}{f.name}')">Borrar</button>
-    </div>`).join('');
+  document.getElementById('list').innerHTML=buildList(d.files);
+  setupDrag();
+  updateBulkBtn();
 }
+
+function setupDrag(){
+  document.querySelectorAll('.file-row').forEach(row=>{
+    row.addEventListener('dragstart',e=>{
+      dragSrc=row;
+      row.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move';
+    });
+    row.addEventListener('dragend',()=>{
+      row.classList.remove('dragging');
+      document.querySelectorAll('.file-row').forEach(r=>r.classList.remove('drag-over'));
+      saveOrder();
+    });
+    row.addEventListener('dragover',e=>{
+      e.preventDefault();
+      if(dragSrc&&dragSrc!==row){
+        row.classList.add('drag-over');
+        const list=document.getElementById('list');
+        const rows=[...list.querySelectorAll('.file-row')];
+        const srcIdx=rows.indexOf(dragSrc);
+        const dstIdx=rows.indexOf(row);
+        if(srcIdx<dstIdx) row.after(dragSrc); else row.before(dragSrc);
+      }
+    });
+    row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
+    row.addEventListener('drop',e=>e.preventDefault());
+  });
+}
+
+async function saveOrder(){
+  const names=[...document.querySelectorAll('.file-row')].map(r=>r.dataset.name);
+  await fetch('/reorder',{method:'POST',body:JSON.stringify(names),headers:{'Content-Type':'application/json'}});
+}
+
+function updateBulkBtn(){
+  const n=document.querySelectorAll('.chk:checked').length;
+  document.getElementById('selCount').textContent=n;
+  document.getElementById('btnBulk').style.display=n>0?'inline-block':'none';
+}
+
+function toggleAll(){
+  const chks=[...document.querySelectorAll('.chk')];
+  const allChecked=chks.every(c=>c.checked);
+  chks.forEach(c=>c.checked=!allChecked);
+  updateBulkBtn();
+}
+
+async function delSelected(){
+  const names=[...document.querySelectorAll('.chk:checked')].map(c=>c.value);
+  if(!names.length)return;
+  if(!confirm('¿Borrar '+names.length+' archivo(s)?'))return;
+  await fetch('/delete-bulk',{method:'POST',body:JSON.stringify(names),headers:{'Content-Type':'application/json'}});
+  load();
+}
+
 async function upload(files){
   for(const f of files){
     const fd=new FormData();fd.append('file',f);
@@ -98,11 +183,13 @@ async function upload(files){
   }
   load();
 }
+
 async function del(name){
   if(!confirm('¿Borrar '+name+'?'))return;
   await fetch('/delete',{method:'POST',body:name,headers:{'Content-Type':'text/plain'}});
   load();
 }
+
 load();
 </script></body></html>""")
         }
@@ -147,8 +234,52 @@ load();
         }
     }
 
+    private fun handleDeleteBulk(session: IHTTPSession): Response {
+        return try {
+            val body = mutableMapOf<String, String>()
+            session.parseBody(body)
+            val json = body["postData"] ?: return newFixedLengthResponse(
+                Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "No body"
+            )
+            val names = parseJsonArray(json)
+            names.forEach { name ->
+                val safe = java.io.File(name).name
+                java.io.File(pdfsDir, safe).delete()
+            }
+            // Limpiar del orden guardado los archivos eliminados
+            val currentOrder = Prefs.getPlaylistOrder(context).filter { it !in names }
+            Prefs.setPlaylistOrder(context, currentOrder)
+            newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, "OK")
+        } catch (e: Exception) {
+            newFixedLengthResponse(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, e.message)
+        }
+    }
+
+    private fun handleReorder(session: IHTTPSession): Response {
+        return try {
+            val body = mutableMapOf<String, String>()
+            session.parseBody(body)
+            val json = body["postData"] ?: return newFixedLengthResponse(
+                Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "No body"
+            )
+            val order = parseJsonArray(json)
+            Prefs.setPlaylistOrder(context, order)
+            newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, "OK")
+        } catch (e: Exception) {
+            newFixedLengthResponse(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, e.message)
+        }
+    }
+
+    /** Parsea un array JSON simple de strings: ["a","b","c"] */
+    private fun parseJsonArray(json: String): List<String> {
+        val trimmed = json.trim().removePrefix("[").removeSuffix("]")
+        if (trimmed.isBlank()) return emptyList()
+        return trimmed.split(",").map { it.trim().removeSurrounding("\"") }
+    }
+
     private fun serveFileList(): Response {
-        val files = FileManager.listMedia(pdfsDir)
+        val order = Prefs.getPlaylistOrder(context)
+        val files = FileManager.listMediaOrdered(pdfsDir, order)
         val json = buildString {
             append("""{"files":[""")
             files.forEachIndexed { i, mf ->

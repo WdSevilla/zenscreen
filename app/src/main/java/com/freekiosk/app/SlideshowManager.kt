@@ -22,4 +22,8 @@ class SlideshowManager<T>(items: List<T>) {
         list = items.toList()
         index = 0
     }
+
+    fun seekTo(idx: Int) {
+        if (idx in list.indices) index = idx
+    }
 }

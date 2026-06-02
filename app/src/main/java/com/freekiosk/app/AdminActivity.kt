@@ -12,21 +12,27 @@ import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.format.Formatter
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.freekiosk.app.databinding.ActivityAdminBinding
 
 class AdminActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdminBinding
+    private lateinit var mediaAdapter: MediaFileAdapter
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     private val pickMedia = registerForActivityResult(
         ActivityResultContracts.GetMultipleContents()
-    ) { uris -> uris.forEach { importMedia(it) }; refreshFileCount() }
+    ) { uris -> uris.forEach { importMedia(it) }; refreshFileList() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +41,8 @@ class AdminActivity : AppCompatActivity() {
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setupServerUrl()
-        refreshFileCount()
+        setupFilesList()
+        refreshFileList()
         setupSlider()
         setupOrientationButtons()
         setupAdvancedSettings()
@@ -44,7 +51,7 @@ class AdminActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refreshFileCount()
+        refreshFileList()
         setupServerUrl()
         updateLauncherButton()
     }
@@ -64,9 +71,43 @@ class AdminActivity : AppCompatActivity() {
         }
     }
 
-    private fun refreshFileCount() {
+    private fun setupFilesList() {
+        mediaAdapter = MediaFileAdapter(
+            onDelete = { mf -> confirmDelete(mf) },
+            onSelectionChanged = { count -> updateBulkDeleteButton(count) },
+            onStartDrag = { vh -> itemTouchHelper.startDrag(vh) }
+        )
+
+        binding.filesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@AdminActivity)
+            adapter = mediaAdapter
+            isNestedScrollingEnabled = false
+        }
+
+        val dragCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0
+        ) {
+            override fun onMove(rv: RecyclerView, vh: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                mediaAdapter.moveItem(vh.adapterPosition, target.adapterPosition)
+                return true
+            }
+            override fun onSwiped(vh: RecyclerView.ViewHolder, direction: Int) {}
+            override fun clearView(rv: RecyclerView, vh: RecyclerView.ViewHolder) {
+                super.clearView(rv, vh)
+                saveOrder()
+            }
+        }
+        itemTouchHelper = ItemTouchHelper(dragCallback)
+        itemTouchHelper.attachToRecyclerView(binding.filesRecyclerView)
+
+        binding.btnDeleteSelected.setOnClickListener { confirmDeleteSelected() }
+    }
+
+    private fun refreshFileList() {
         val dir = FileManager.getPdfsDir(this)
-        val all = FileManager.listMedia(dir)
+        val order = Prefs.getPlaylistOrder(this)
+        val all = FileManager.listMediaOrdered(dir, order)
+
         val pdfs   = all.count { it.type == MediaType.PDF }
         val images = all.count { it.type == MediaType.IMAGE }
         val videos = all.count { it.type == MediaType.VIDEO }
@@ -81,6 +122,49 @@ class AdminActivity : AppCompatActivity() {
                 append(parts.joinToString(" · "))
             }
         }
+        mediaAdapter.submitList(all)
+    }
+
+    private fun saveOrder() {
+        val order = mediaAdapter.getItems().map { it.file.name }
+        Prefs.setPlaylistOrder(this, order)
+    }
+
+    private fun updateBulkDeleteButton(selectedCount: Int) {
+        binding.btnDeleteSelected.visibility = if (selectedCount > 0) View.VISIBLE else View.GONE
+        binding.btnDeleteSelected.text = "Borrar seleccionados ($selectedCount)"
+    }
+
+    private fun confirmDelete(mf: MediaFile) {
+        AlertDialog.Builder(this)
+            .setTitle("Borrar archivo")
+            .setMessage("¿Borrar ${mf.file.name}?")
+            .setPositiveButton("Borrar") { _, _ ->
+                mf.file.delete()
+                val newOrder = Prefs.getPlaylistOrder(this).filter { it != mf.file.name }
+                Prefs.setPlaylistOrder(this, newOrder)
+                refreshFileList()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun confirmDeleteSelected() {
+        val names = mediaAdapter.getSelectedNames()
+        if (names.isEmpty()) return
+        AlertDialog.Builder(this)
+            .setTitle("Borrar archivos")
+            .setMessage("¿Borrar ${names.size} archivo(s) seleccionado(s)?")
+            .setPositiveButton("Borrar") { _, _ ->
+                val dir = FileManager.getPdfsDir(this)
+                names.forEach { java.io.File(dir, it).delete() }
+                val newOrder = Prefs.getPlaylistOrder(this).filter { it !in names }
+                Prefs.setPlaylistOrder(this, newOrder)
+                mediaAdapter.clearSelection()
+                refreshFileList()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     private fun importMedia(uri: Uri) {
