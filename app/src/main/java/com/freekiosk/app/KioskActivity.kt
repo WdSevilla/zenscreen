@@ -34,7 +34,6 @@ class KioskActivity : AppCompatActivity() {
         binding = ActivityKioskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         hideSystemUI()
-        tryLockTask()
         startServer()
         setupLongPressAdmin()
         setupTapToAdvance()
@@ -75,10 +74,6 @@ class KioskActivity : AppCompatActivity() {
             it.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
             it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
-    }
-
-    private fun tryLockTask() {
-        try { startLockTask() } catch (e: Exception) { }
     }
 
     private fun startServer() {
