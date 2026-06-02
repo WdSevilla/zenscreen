@@ -21,11 +21,9 @@ class PdfPageRenderer(file: File) : Closeable {
         val pageW = page.width.toFloat()
         val pageH = page.height.toFloat()
 
-        // Escalar para llenar el ancho completo — elimina barras negras laterales
-        // Si la página es más alta que la pantalla, escalar por altura en su lugar
-        val scaleByWidth = targetWidth / pageW
-        val scaleByHeight = targetHeight / pageH
-        val scale = maxOf(scaleByWidth, scaleByHeight)
+        // Siempre llenar el ancho completo — sin barras laterales
+        // El PDF puede quedar levemente recortado arriba/abajo si es más largo que la pantalla
+        val scale = targetWidth / pageW
 
         val bmpW = (pageW * scale).toInt().coerceAtLeast(1)
         val bmpH = (pageH * scale).toInt().coerceAtLeast(1)
