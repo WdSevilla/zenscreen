@@ -1,6 +1,6 @@
 package com.freekiosk.app
 
-import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -102,11 +102,11 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun highlightOrientation(selected: String) {
-        val active   = 0xFF4f8ef7.toInt()
-        val inactive = 0xFF22263a.toInt()
-        binding.btnOrientPortrait.setBackgroundColor( if (selected == "portrait")  active else inactive)
-        binding.btnOrientLandscape.setBackgroundColor(if (selected == "landscape") active else inactive)
-        binding.btnOrientSensor.setBackgroundColor(   if (selected == "sensor")    active else inactive)
+        val active   = ColorStateList.valueOf(0xFF4f8ef7.toInt())
+        val inactive = ColorStateList.valueOf(0xFF22263a.toInt())
+        binding.btnOrientPortrait.backgroundTintList  = if (selected == "portrait")  active else inactive
+        binding.btnOrientLandscape.backgroundTintList = if (selected == "landscape") active else inactive
+        binding.btnOrientSensor.backgroundTintList    = if (selected == "sensor")    active else inactive
     }
 
     private fun setupButtons() {
