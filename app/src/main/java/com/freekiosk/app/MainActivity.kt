@@ -55,15 +55,20 @@ class MainActivity : AppCompatActivity() {
     // ── Launcher por defecto ────────────────────────────────────────────────
 
     private fun requestHomeLauncherIfNeeded() {
-        if (isDefaultLauncher()) {
-            goToKiosk()
-            return
-        }
-        // Abrir ajustes de "App de inicio" para que el usuario seleccione ZenScreen
-        try {
-            startActivity(Intent(Settings.ACTION_HOME_SETTINGS))
-        } catch (e: Exception) {
-            goToKiosk()
+        when {
+            // Ya es el launcher — ir al kiosk directamente
+            isDefaultLauncher() -> goToKiosk()
+            // Ya preguntamos antes — no molestar de nuevo, ir al kiosk
+            Prefs.hasAskedLauncher(this) -> goToKiosk()
+            // Primera vez — abrir ajustes y marcar como preguntado
+            else -> {
+                Prefs.setLauncherAsked(this)
+                try {
+                    startActivity(Intent(Settings.ACTION_HOME_SETTINGS))
+                } catch (e: Exception) {
+                    goToKiosk()
+                }
+            }
         }
     }
 
@@ -75,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Al volver de ajustes, verificar si ya fue seleccionado
+        // Al volver de ajustes, si ya es el launcher ir al kiosk
         if (isDefaultLauncher()) goToKiosk()
     }
 

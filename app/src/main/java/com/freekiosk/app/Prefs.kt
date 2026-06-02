@@ -20,6 +20,7 @@ object Prefs {
     private const val KEY_SERVER_PORT = "server_port"
     private const val KEY_SERVER_USER = "server_user"
     private const val KEY_SERVER_PASS = "server_pass"
+    private const val KEY_LAUNCHER_ASKED = "launcher_asked"
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
@@ -59,4 +60,10 @@ object Prefs {
 
     fun setServerPass(context: Context, pass: String) =
         prefs(context).edit().putString(KEY_SERVER_PASS, pass).apply()
+
+    fun hasAskedLauncher(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_LAUNCHER_ASKED, false)
+
+    fun setLauncherAsked(context: Context) =
+        prefs(context).edit().putBoolean(KEY_LAUNCHER_ASKED, true).apply()
 }
