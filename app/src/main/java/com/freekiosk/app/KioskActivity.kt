@@ -1,6 +1,7 @@
 package com.freekiosk.app
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
@@ -20,6 +21,7 @@ class KioskActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applyOrientation()
         binding = ActivityKioskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         hideSystemUI()
@@ -38,6 +40,14 @@ class KioskActivity : AppCompatActivity() {
         currentRenderer?.close()
         scope.cancel()
         super.onDestroy()
+    }
+
+    private fun applyOrientation() {
+        requestedOrientation = when (Prefs.getOrientation(this)) {
+            "landscape" -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            "sensor"    -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
+            else        -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
     }
 
     private fun hideSystemUI() {

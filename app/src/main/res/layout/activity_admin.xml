@@ -115,6 +115,61 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Orientación -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1a1d27"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ORIENTACIÓN DE PANTALLA"
+            android:textColor="#64748b"
+            android:textSize="11sp"
+            android:layout_marginBottom="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOrientPortrait"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Vertical"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:backgroundTint="@null" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOrientLandscape"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Horizontal"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:backgroundTint="@null" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOrientSensor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Auto"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:backgroundTint="@null" />
+
+        </LinearLayout>
+    </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/backToKioskBtn"
         android:layout_width="match_parent"

@@ -26,6 +26,7 @@ class AdminActivity : AppCompatActivity() {
         setupServerUrl()
         refreshFileCount()
         setupSlider()
+        setupOrientationButtons()
         setupButtons()
     }
 
@@ -81,6 +82,32 @@ class AdminActivity : AppCompatActivity() {
             binding.intervalLabel.text = "${value.toInt()}s"
             Prefs.setIntervalSeconds(this, value.toLong())
         }
+    }
+
+    private fun setupOrientationButtons() {
+        val current = Prefs.getOrientation(this)
+        binding.btnOrientPortrait.isSelected  = current == "portrait"
+        binding.btnOrientLandscape.isSelected = current == "landscape"
+        binding.btnOrientSensor.isSelected    = current == "sensor"
+
+        binding.btnOrientPortrait.setOnClickListener {
+            Prefs.setOrientation(this, "portrait")
+            highlightOrientation("portrait")
+        }
+        binding.btnOrientLandscape.setOnClickListener {
+            Prefs.setOrientation(this, "landscape")
+            highlightOrientation("landscape")
+        }
+        binding.btnOrientSensor.setOnClickListener {
+            Prefs.setOrientation(this, "sensor")
+            highlightOrientation("sensor")
+        }
+    }
+
+    private fun highlightOrientation(selected: String) {
+        binding.btnOrientPortrait.isSelected  = selected == "portrait"
+        binding.btnOrientLandscape.isSelected = selected == "landscape"
+        binding.btnOrientSensor.isSelected    = selected == "sensor"
     }
 
     private fun setupButtons() {
