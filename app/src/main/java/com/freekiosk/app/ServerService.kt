@@ -25,8 +25,11 @@ class ServerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val pdfsDir = FileManager.getPdfsDir(this)
-        server = WifiServer(SERVER_PORT, pdfsDir).also { it.start() }
+        // Solo arrancar si no está corriendo ya (evita EADDRINUSE en reintentos)
+        if (server == null || !server!!.isAlive) {
+            val pdfsDir = FileManager.getPdfsDir(this)
+            server = WifiServer(SERVER_PORT, pdfsDir).also { it.start() }
+        }
         startForeground(NOTIF_ID, buildNotification())
         return START_STICKY
     }
