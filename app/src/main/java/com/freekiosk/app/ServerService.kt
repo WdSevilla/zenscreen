@@ -12,9 +12,11 @@ import android.text.format.Formatter
 class ServerService : Service() {
 
     companion object {
-        const val SERVER_PORT = 8080
+        const val ACTION_RESTART = "com.freekiosk.app.RESTART_SERVER"
         private const val CHANNEL_ID = "freekiosk_server"
         private const val NOTIF_ID = 1
+
+        fun getPort(context: android.content.Context) = Prefs.getServerPort(context)
     }
 
     private var server: WifiServer? = null
@@ -25,10 +27,16 @@ class ServerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Solo arrancar si no está corriendo ya (evita EADDRINUSE en reintentos)
+        val port = Prefs.getServerPort(this)
+        // Reiniciar si se pidió explícitamente o el puerto cambió
+        val portChanged = server?.isAlive == true && server?.listeningPort != port
+        if (intent?.action == ACTION_RESTART || portChanged) {
+            server?.stop()
+            server = null
+        }
         if (server == null || !server!!.isAlive) {
             val pdfsDir = FileManager.getPdfsDir(this)
-            server = WifiServer(SERVER_PORT, pdfsDir).also { it.start() }
+            server = WifiServer(port, pdfsDir).also { it.start() }
         }
         startForeground(NOTIF_ID, buildNotification())
         return START_STICKY
@@ -50,7 +58,7 @@ class ServerService : Service() {
         val ip = try { getLocalIp() } catch (e: Exception) { "127.0.0.1" }
         return Notification.Builder(this, CHANNEL_ID)
             .setContentTitle("ZenScreen activo")
-            .setContentText("Dashboard: http://$ip:$SERVER_PORT")
+            .setContentText("Dashboard: http://$ip:${Prefs.getServerPort(this)}")
             .setSmallIcon(R.drawable.ic_notification)
             .setOngoing(true)
             .build()

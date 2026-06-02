@@ -1,5 +1,6 @@
 package com.freekiosk.app
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -10,6 +11,11 @@ import android.os.Bundle
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.format.Formatter
+import android.view.LayoutInflater
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.freekiosk.app.databinding.ActivityAdminBinding
@@ -27,12 +33,12 @@ class AdminActivity : AppCompatActivity() {
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // El admin siempre en portrait para facilitar el uso
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setupServerUrl()
         refreshFileCount()
         setupSlider()
         setupOrientationButtons()
+        setupAdvancedSettings()
         setupButtons()
     }
 
@@ -45,7 +51,8 @@ class AdminActivity : AppCompatActivity() {
 
     private fun setupServerUrl() {
         val ip = getLocalIp()
-        binding.serverUrlText.text = "http://$ip:${ServerService.SERVER_PORT}"
+        val port = Prefs.getServerPort(this)
+        binding.serverUrlText.text = "http://$ip:$port"
     }
 
     private fun getLocalIp(): String {
@@ -115,6 +122,112 @@ class AdminActivity : AppCompatActivity() {
         binding.btnOrientLandscape.backgroundTintList = if (selected == "landscape") active else inactive
         binding.btnOrientSensor.backgroundTintList    = if (selected == "sensor")    active else inactive
     }
+
+    // ── Configuración avanzada ──────────────────────────────────────────────
+
+    private fun setupAdvancedSettings() {
+        binding.btnChangePin.setOnClickListener { showChangePinDialog() }
+        binding.btnChangePort.setOnClickListener { showChangePortDialog() }
+    }
+
+    private fun showChangePinDialog() {
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(48, 24, 48, 8)
+        }
+        val currentInput = EditText(this).apply {
+            hint = "PIN actual"
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER or
+                    android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        }
+        val newInput = EditText(this).apply {
+            hint = "PIN nuevo (mínimo 4 dígitos)"
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER or
+                    android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        }
+        val confirmInput = EditText(this).apply {
+            hint = "Confirmar PIN nuevo"
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER or
+                    android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        }
+        layout.addView(currentInput)
+        layout.addView(newInput)
+        layout.addView(confirmInput)
+
+        AlertDialog.Builder(this)
+            .setTitle("Cambiar PIN")
+            .setView(layout)
+            .setPositiveButton("Guardar") { _, _ ->
+                val current = currentInput.text.toString()
+                val new = newInput.text.toString()
+                val confirm = confirmInput.text.toString()
+                when {
+                    current != Prefs.getPin(this) ->
+                        toast("PIN actual incorrecto")
+                    new.length < 4 ->
+                        toast("El PIN debe tener al menos 4 dígitos")
+                    new != confirm ->
+                        toast("Los PINs no coinciden")
+                    else -> {
+                        Prefs.setPin(this, new)
+                        toast("PIN actualizado correctamente")
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun showChangePortDialog() {
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(48, 24, 48, 8)
+        }
+        val portInput = EditText(this).apply {
+            hint = "Puerto (1024–65535)"
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER
+            setText(Prefs.getServerPort(this@AdminActivity).toString())
+        }
+        val note = TextView(this).apply {
+            text = "El servidor se reiniciará al guardar."
+            textSize = 12f
+            setTextColor(0xFF64748b.toInt())
+            setPadding(0, 8, 0, 0)
+        }
+        layout.addView(portInput)
+        layout.addView(note)
+
+        AlertDialog.Builder(this)
+            .setTitle("Cambiar puerto del servidor")
+            .setView(layout)
+            .setPositiveButton("Guardar y reiniciar") { _, _ ->
+                val portStr = portInput.text.toString()
+                val port = portStr.toIntOrNull()
+                when {
+                    port == null || port < 1024 || port > 65535 ->
+                        toast("Puerto inválido (usa un valor entre 1024 y 65535)")
+                    else -> {
+                        Prefs.setServerPort(this, port)
+                        restartServer()
+                        setupServerUrl()
+                        toast("Servidor reiniciado en puerto $port")
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun restartServer() {
+        val intent = Intent(this, ServerService::class.java).apply {
+            action = ServerService.ACTION_RESTART
+        }
+        stopService(Intent(this, ServerService::class.java))
+        startForegroundService(intent)
+    }
+
+    private fun toast(msg: String) =
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
     private fun setupButtons() {
         binding.importUsbBtn.setOnClickListener {

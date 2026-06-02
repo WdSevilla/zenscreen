@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 object Prefs {
     const val DEFAULT_PIN = "1234"
     const val DEFAULT_INTERVAL_SECONDS = 10L
+    const val DEFAULT_SERVER_PORT = 8080
 
     // Valores posibles: "portrait", "landscape", "sensor"
     const val DEFAULT_ORIENTATION = "portrait"
@@ -14,6 +15,7 @@ object Prefs {
     private const val KEY_PIN = "admin_pin"
     private const val KEY_INTERVAL = "slideshow_interval"
     private const val KEY_ORIENTATION = "orientation"
+    private const val KEY_SERVER_PORT = "server_port"
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
@@ -35,4 +37,10 @@ object Prefs {
 
     fun setOrientation(context: Context, value: String) =
         prefs(context).edit().putString(KEY_ORIENTATION, value).apply()
+
+    fun getServerPort(context: Context): Int =
+        prefs(context).getInt(KEY_SERVER_PORT, DEFAULT_SERVER_PORT)
+
+    fun setServerPort(context: Context, port: Int) =
+        prefs(context).edit().putInt(KEY_SERVER_PORT, port).apply()
 }
