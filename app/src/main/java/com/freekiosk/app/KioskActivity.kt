@@ -25,6 +25,7 @@ class KioskActivity : AppCompatActivity() {
         binding = ActivityKioskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         hideSystemUI()
+        tryLockTask()
         startServer()
         setupLongPressAdmin()
         setupTapToAdvance()
@@ -43,12 +44,27 @@ class KioskActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    // Bloquear botón Atrás — no hace nada en modo kiosk
+    @Suppress("OVERRIDE_DEPRECATION")
+    override fun onBackPressed() { /* bloqueado */ }
+
+    // Intentar activar pin task (Screen Pinning) al arrancar
+    private fun tryLockTask() {
+        try {
+            startLockTask()
+        } catch (e: Exception) {
+            // Si el dispositivo no lo permite, continúa sin bloqueo
+        }
+    }
+
     private fun applyOrientation() {
-        requestedOrientation = when (Prefs.getOrientation(this)) {
+        val desired = when (Prefs.getOrientation(this)) {
             "landscape" -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             "sensor"    -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
             else        -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+        // Solo cambiar si es diferente — evita loop de recreación
+        if (requestedOrientation != desired) requestedOrientation = desired
     }
 
     private fun hideSystemUI() {
