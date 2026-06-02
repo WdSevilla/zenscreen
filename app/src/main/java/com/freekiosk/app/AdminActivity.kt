@@ -1,5 +1,6 @@
 package com.freekiosk.app
 
+import android.content.pm.ActivityInfo
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.net.wifi.WifiManager
@@ -23,6 +24,8 @@ class AdminActivity : AppCompatActivity() {
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // El admin siempre en portrait para facilitar el uso
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setupServerUrl()
         refreshFileCount()
         setupSlider()
