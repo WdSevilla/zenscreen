@@ -1,6 +1,90 @@
-.gradle/
+# ─── Build outputs ────────────────────────────────────────────────────────────
 build/
 app/build/
-*.iml
+*/build/
+out/
+
+# ─── Gradle ───────────────────────────────────────────────────────────────────
+.gradle/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# ─── Android Studio / IntelliJ ────────────────────────────────────────────────
 .idea/
+*.iml
+*.ipr
+*.iws
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# ─── macOS ────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+Thumbs.db
+
+# ─── Duplicados macOS (bug al copiar/mover carpetas) ──────────────────────────
+* 2.*
+* 2/
+
+# ─── Keystore y firma — NUNCA subir al repo ───────────────────────────────────
+*.jks
+*.keystore
+*.p12
+*.pfx
+keystore.properties
+release.properties
+signing.properties
+
+# ─── Archivos locales de configuración ────────────────────────────────────────
 local.properties
+*.local.properties
+
+# ─── Variables de entorno y secretos ──────────────────────────────────────────
+.env
+.env.*
+secrets.properties
+google-services.json
+GoogleService-Info.plist
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── APKs y AABs generados ────────────────────────────────────────────────────
+*.apk
+*.aab
+*.ap_
+
+# ─── ProGuard ─────────────────────────────────────────────────────────────────
+proguard/
+*.pro.bak
+
+# ─── NDK / CMake ──────────────────────────────────────────────────────────────
+.externalNativeBuild/
+.cxx/
+*.so
+
+# ─── Test results ─────────────────────────────────────────────────────────────
+test-results/
+.test-results/
+
+# ─── Lint ─────────────────────────────────────────────────────────────────────
+lint/
+lint-results*.xml
+lint-results*.html
+
+# ─── Temporales ───────────────────────────────────────────────────────────────
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
