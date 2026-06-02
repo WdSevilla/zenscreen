@@ -25,18 +25,16 @@ Pensada para tabletas fijas en **recepciones, salas de espera, exhibiciones o pu
 
 ## Características
 
-| | Función |
-|---|---|
-| 📄 | **Slideshow de PDFs** en bucle infinito |
-| ⏱️ | **Intervalo configurable** de 3 a 60 segundos |
-| 👆 | **Toque para avanzar** manualmente |
-| 🔒 | **Modo kiosk** — bloquea Atrás, oculta barras del sistema |
-| 🏠 | **Launcher integrado** — Home siempre vuelve al kiosk |
-| 🔄 | **Arranque automático** al encender la tablet |
-| 📡 | **Servidor WiFi** con autenticación — sube/elimina PDFs desde el browser |
-| 🛠️ | **Panel de administración** oculto con PIN |
-| 🔃 | **Orientación configurable** — vertical, horizontal o automática |
-| 🔑 | **PIN, puerto y credenciales** configurables desde la interfaz |
+- 📄 **Slideshow de PDFs** en bucle infinito
+- ⏱️ **Intervalo configurable** de 3 a 60 segundos
+- 👆 **Toque para avanzar** manualmente
+- 🔒 **Modo kiosk** — bloquea Atrás, oculta barras del sistema
+- 🏠 **Launcher integrado** — Home siempre vuelve al kiosk
+- 🔄 **Arranque automático** al encender la tablet
+- 📡 **Servidor WiFi** con autenticación — sube/elimina PDFs desde el browser
+- 🛠️ **Panel de administración** oculto con PIN
+- 🔃 **Orientación configurable** — vertical, horizontal o automática
+- 🔑 **PIN, puerto y credenciales** configurables desde la interfaz
 
 ---
 
