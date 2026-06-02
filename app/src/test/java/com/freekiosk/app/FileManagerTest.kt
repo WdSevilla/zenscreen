@@ -124,4 +124,53 @@ class FileManagerTest {
             assertEquals(MediaType.VIDEO, FileManager.mediaTypeOf(File("file.$ext")))
         }
     }
+
+    @Test
+    fun `listMediaOrdered respects stored order`() {
+        val dir = tmp.newFolder("ordered")
+        File(dir, "c.pdf").createNewFile()
+        File(dir, "a.jpg").createNewFile()
+        File(dir, "b.mp4").createNewFile()
+
+        val result = FileManager.listMediaOrdered(dir, listOf("b.mp4", "c.pdf", "a.jpg"))
+
+        assertEquals("b.mp4", result[0].file.name)
+        assertEquals("c.pdf", result[1].file.name)
+        assertEquals("a.jpg", result[2].file.name)
+    }
+
+    @Test
+    fun `listMediaOrdered appends new files not in order at end`() {
+        val dir = tmp.newFolder("append")
+        File(dir, "known.pdf").createNewFile()
+        File(dir, "newfile.jpg").createNewFile()
+
+        val result = FileManager.listMediaOrdered(dir, listOf("known.pdf"))
+
+        assertEquals("known.pdf", result[0].file.name)
+        assertEquals("newfile.jpg", result[1].file.name)
+    }
+
+    @Test
+    fun `listMediaOrdered skips names that no longer exist on disk`() {
+        val dir = tmp.newFolder("skip")
+        File(dir, "exists.pdf").createNewFile()
+
+        val result = FileManager.listMediaOrdered(dir, listOf("deleted.mp4", "exists.pdf"))
+
+        assertEquals(1, result.size)
+        assertEquals("exists.pdf", result[0].file.name)
+    }
+
+    @Test
+    fun `listMediaOrdered with empty order returns alphabetical`() {
+        val dir = tmp.newFolder("empty_order")
+        File(dir, "b.pdf").createNewFile()
+        File(dir, "a.jpg").createNewFile()
+
+        val result = FileManager.listMediaOrdered(dir, emptyList())
+
+        assertEquals("a.jpg", result[0].file.name)
+        assertEquals("b.pdf", result[1].file.name)
+    }
 }

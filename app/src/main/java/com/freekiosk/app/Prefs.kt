@@ -21,6 +21,7 @@ object Prefs {
     private const val KEY_SERVER_USER = "server_user"
     private const val KEY_SERVER_PASS = "server_pass"
     private const val KEY_LAUNCHER_ASKED = "launcher_asked"
+    private const val KEY_PLAYLIST = "playlist_order"
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
@@ -66,4 +67,15 @@ object Prefs {
 
     fun setLauncherAsked(context: Context) =
         prefs(context).edit().putBoolean(KEY_LAUNCHER_ASKED, true).apply()
+
+    fun getPlaylistOrder(context: Context): List<String> {
+        val stored = prefs(context).getString(KEY_PLAYLIST, "") ?: ""
+        return if (stored.isEmpty()) emptyList() else stored.split("\n")
+    }
+
+    fun setPlaylistOrder(context: Context, order: List<String>) {
+        prefs(context).edit()
+            .putString(KEY_PLAYLIST, order.joinToString("\n"))
+            .apply()
+    }
 }

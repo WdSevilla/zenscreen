@@ -38,6 +38,20 @@ object FileManager {
             ?.sortedBy { it.file.name }
             ?: emptyList()
 
+    /**
+     * Lista archivos respetando el [order] guardado.
+     * - Archivos en [order] que existen → en el orden indicado
+     * - Archivos nuevos no en [order] → al final, alfabético
+     * - Nombres en [order] que ya no existen → ignorados
+     */
+    fun listMediaOrdered(dir: File, order: List<String>): List<MediaFile> {
+        val allFiles = listMedia(dir)
+        val filesByName = allFiles.associateBy { it.file.name }
+        val orderedFiles = order.mapNotNull { name -> filesByName[name] }
+        val newFiles = allFiles.filter { mf -> mf.file.name !in order }
+        return orderedFiles + newFiles
+    }
+
     fun listPdfs(dir: File): List<File> =
         listMedia(dir).filter { it.type == MediaType.PDF }.map { it.file }
 
