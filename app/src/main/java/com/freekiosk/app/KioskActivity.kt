@@ -15,6 +15,7 @@ import com.freekiosk.app.databinding.ActivityKioskBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.coroutines.coroutineContext
 import java.io.File
 
 class KioskActivity : AppCompatActivity() {
@@ -92,19 +93,22 @@ class KioskActivity : AppCompatActivity() {
     // ── Slideshow ────────────────────────────────────────────────────────────
 
     private fun reloadAndStart() {
-        val dir = FileManager.getPdfsDir(this)
-        val files = FileManager.listMedia(dir)
-        slideshow.reload(files)
+        // Mover I/O de archivos fuera del hilo principal
+        scope.launch {
+            val dir   = withContext(Dispatchers.IO) { FileManager.getPdfsDir(this@KioskActivity) }
+            val files = withContext(Dispatchers.IO) { FileManager.listMedia(dir) }
+            slideshow.reload(files)
 
-        if (slideshow.isEmpty()) {
-            binding.emptyText.visibility = View.VISIBLE
-            binding.pdfImageView.visibility = View.GONE
-            binding.videoPlayerView.visibility = View.GONE
-            return
+            if (slideshow.isEmpty()) {
+                binding.emptyText.visibility = View.VISIBLE
+                binding.pdfImageView.visibility = View.GONE
+                binding.videoPlayerView.visibility = View.GONE
+                return@launch
+            }
+
+            binding.emptyText.visibility = View.GONE
+            renderCurrent()
         }
-
-        binding.emptyText.visibility = View.GONE
-        renderCurrent()
     }
 
     private fun renderCurrent() {
@@ -146,7 +150,7 @@ class KioskActivity : AppCompatActivity() {
                 }
             }
         }
-        startTimerAdvance()
+        if (coroutineContext.isActive) startTimerAdvance()
     }
 
     // ── Imagen ───────────────────────────────────────────────────────────────
@@ -180,7 +184,7 @@ class KioskActivity : AppCompatActivity() {
                 }
             }
         }
-        startTimerAdvance()
+        if (coroutineContext.isActive) startTimerAdvance()
     }
 
     private fun calculateInSampleSize(w: Int, h: Int, reqW: Int, reqH: Int): Int {
@@ -195,14 +199,22 @@ class KioskActivity : AppCompatActivity() {
 
     // ── Video ────────────────────────────────────────────────────────────────
 
-    private fun renderVideo(file: File) {
-        currentRenderer?.close()
-        currentRenderer = null
-        slideshowJob?.cancel()  // video dicta el ritmo, no el timer
-        showVideoView()
+    private suspend fun renderVideo(file: File) {
+        // Cerrar el renderer bajo el mutex para evitar race condition con renderPdf/renderImage
+        withContext(Dispatchers.IO) {
+            renderMutex.withLock {
+                currentRenderer?.close()
+                currentRenderer = null
+            }
+        }
+        if (!coroutineContext.isActive) return
 
+        slideshowJob?.cancel()
+        showVideoView()
         releasePlayer()
-        val player = ExoPlayer.Builder(this).build()
+
+        // ExoPlayer debe crearse y usarse en el hilo principal
+        val player = ExoPlayer.Builder(this@KioskActivity).build()
         exoPlayer = player
         binding.videoPlayerView.player = player
 
