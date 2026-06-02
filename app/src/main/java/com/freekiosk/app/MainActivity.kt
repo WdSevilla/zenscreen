@@ -1,11 +1,11 @@
 package com.freekiosk.app
 
 import android.Manifest
-import android.app.role.RoleManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -14,7 +14,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val REQ_PERMISSIONS = 100
-        private const val REQ_HOME_ROLE   = 101
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,26 +59,12 @@ class MainActivity : AppCompatActivity() {
             goToKiosk()
             return
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // API 29+ — diálogo nativo del sistema para asignar rol HOME
-            val roleManager = getSystemService(RoleManager::class.java)
-            if (roleManager.isRoleAvailable(RoleManager.ROLE_HOME) &&
-                !roleManager.isRoleHeld(RoleManager.ROLE_HOME)) {
-                startActivityForResult(
-                    roleManager.createRequestRoleIntent(RoleManager.ROLE_HOME),
-                    REQ_HOME_ROLE
-                )
-                return
-            }
-        } else {
-            // API < 29 — mostrar selector de launcher del sistema
-            val intent = Intent(Intent.ACTION_MAIN).apply {
-                addCategory(Intent.CATEGORY_HOME)
-            }
-            startActivity(intent)
+        // Abrir ajustes de "App de inicio" para que el usuario seleccione ZenScreen
+        try {
+            startActivity(Intent(Settings.ACTION_HOME_SETTINGS))
+        } catch (e: Exception) {
+            goToKiosk()
         }
-        goToKiosk()
     }
 
     private fun isDefaultLauncher(): Boolean {
@@ -88,10 +73,10 @@ class MainActivity : AppCompatActivity() {
         return info?.activityInfo?.packageName == packageName
     }
 
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_HOME_ROLE) goToKiosk()
+    override fun onResume() {
+        super.onResume()
+        // Al volver de ajustes, verificar si ya fue seleccionado
+        if (isDefaultLauncher()) goToKiosk()
     }
 
     // ── Kiosk ───────────────────────────────────────────────────────────────

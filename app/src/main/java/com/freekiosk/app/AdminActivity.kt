@@ -1,15 +1,14 @@
 package com.freekiosk.app
 
-import android.app.role.RoleManager
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.net.wifi.WifiManager
-import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.provider.Settings
 import android.text.format.Formatter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -130,16 +129,17 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun requestDefaultLauncher() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val roleManager = getSystemService(RoleManager::class.java)
-            if (roleManager.isRoleAvailable(RoleManager.ROLE_HOME)) {
-                startActivityForResult(
-                    roleManager.createRequestRoleIntent(RoleManager.ROLE_HOME),
-                    REQ_HOME_ROLE
-                )
+        // Abrir ajustes de "App de inicio" — funciona en todos los Android sin permisos especiales
+        try {
+            startActivity(Intent(Settings.ACTION_HOME_SETTINGS))
+        } catch (e: Exception) {
+            // Fallback: abrir ajustes generales de apps predeterminadas
+            try {
+                startActivity(Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS))
+            } catch (e2: Exception) {
+                // Último recurso: ajustes generales
+                startActivity(Intent(Settings.ACTION_SETTINGS))
             }
-        } else {
-            startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
         }
     }
 
@@ -147,12 +147,6 @@ class AdminActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
         val info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
         return info?.activityInfo?.packageName == packageName
-    }
-
-    @Suppress("OVERRIDE_DEPRECATION")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_HOME_ROLE) updateLauncherButton()
     }
 
     private fun updateLauncherButton() {
@@ -165,7 +159,5 @@ class AdminActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val REQ_HOME_ROLE = 101
-    }
+    companion object
 }
