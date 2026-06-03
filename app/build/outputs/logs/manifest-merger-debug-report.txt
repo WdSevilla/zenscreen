@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-67:12
-INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-67:12
-INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-67:12
-INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-67:12
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-82:12
+INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-82:12
+INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-82:12
+INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:2:1-82:12
 MERGED from [androidx.databinding:viewbinding:8.2.2] /Users/wil/.gradle/caches/transforms-3/116333289613686012d3e8f817825726/transformed/jetified-viewbinding-8.2.2/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.11.0] /Users/wil/.gradle/caches/transforms-3/145650af4be7b0f3c1429ca190a0ac38/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/wil/.gradle/caches/transforms-3/9fc978bc2ff8f02f086423507573881f/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
@@ -111,9 +111,13 @@ uses-permission#android.permission.WAKE_LOCK
 ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:14:5-68
 	android:name
 		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:14:22-65
+uses-permission#android.permission.MANAGE_DEVICE_ADMINS
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:15:5-79
+	android:name
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:15:22-76
 application
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:16:5-66:19
-INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:16:5-66:19
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:17:5-81:19
+INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:17:5-81:19
 MERGED from [com.google.android.material:material:1.11.0] /Users/wil/.gradle/caches/transforms-3/145650af4be7b0f3c1429ca190a0ac38/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] /Users/wil/.gradle/caches/transforms-3/145650af4be7b0f3c1429ca190a0ac38/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/wil/.gradle/caches/transforms-3/9fc978bc2ff8f02f086423507573881f/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -135,85 +139,109 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/wil/.gradle/caches/t
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] /Users/wil/.gradle/caches/transforms-3/7f6d27d4124fa585f7a9b5afa5f2d766/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:19:9-41
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:20:9-41
 	android:hardwareAccelerated
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:21:9-43
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:22:9-43
 	android:icon
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:18:9-43
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:19:9-43
 	android:allowBackup
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:17:9-36
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:18:9-36
 	android:theme
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:20:9-47
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:21:9-47
 activity#com.freekiosk.app.MainActivity
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:23:9-31:20
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:24:9-32:20
 	android:screenOrientation
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:26:13-52
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:27:13-52
 	android:exported
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:25:13-36
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:26:13-36
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:24:13-41
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:25:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:27:13-30:29
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:28:13-31:29
 action#android.intent.action.MAIN
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:28:17-69
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:29:17-69
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:28:25-66
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:29:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:29:17-77
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:30:17-77
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:29:27-74
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:30:27-74
 activity#com.freekiosk.app.KioskActivity
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:33:9-45:20
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:34:9-48:20
 	android:screenOrientation
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:36:13-52
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:37:13-52
+	android:excludeFromRecents
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:40:13-46
 	android:launchMode
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:37:13-44
-	android:exported
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:35:13-36
-	android:showOnLockScreen
 		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:38:13-44
+	android:noHistory
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:41:13-38
+	android:exported
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:36:13-36
+	android:showOnLockScreen
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:39:13-44
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:34:13-42
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:35:13-42
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.DEFAULT+category:name:android.intent.category.HOME
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:40:13-44:29
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:43:13-47:29
 category#android.intent.category.HOME
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:42:17-73
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:45:17-73
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:42:27-70
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:45:27-70
 category#android.intent.category.DEFAULT
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:43:17-76
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:46:17-76
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:43:27-73
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:46:27-73
 activity#com.freekiosk.app.AdminActivity
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:47:9-50:55
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:50:9-53:55
 	android:screenOrientation
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:50:13-52
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:53:13-52
 	android:exported
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:49:13-37
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:52:13-37
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:48:13-42
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:51:13-42
 service#com.freekiosk.app.ServerService
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:52:9-55:56
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:55:9-58:56
 	android:exported
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:54:13-37
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:57:13-37
 	android:foregroundServiceType
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:55:13-53
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:58:13-53
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:53:13-42
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:56:13-42
 receiver#com.freekiosk.app.BootReceiver
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:57:9-64:20
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:60:9-67:20
 	android:enabled
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:60:13-35
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:63:13-35
 	android:exported
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:59:13-36
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:62:13-36
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:58:13-41
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:61:13-41
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:61:13-63:29
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:64:13-66:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:62:17-79
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:65:17-79
 	android:name
-		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:62:25-76
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:65:25-76
+receiver#com.freekiosk.app.KioskDeviceAdminReceiver
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:69:9-79:20
+	android:exported
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:71:13-36
+	android:permission
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:72:13-70
+	android:name
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:70:13-53
+meta-data#android.app.device_admin
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:73:13-75:56
+	android:resource
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:75:17-53
+	android:name
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:74:17-56
+intent-filter#action:name:android.app.action.DEVICE_ADMIN_ENABLED
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:76:13-78:29
+action#android.app.action.DEVICE_ADMIN_ENABLED
+ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:77:17-82
+	android:name
+		ADDED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml:77:25-79
 uses-sdk
 INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/wil/Documents/vibe-projects/zenscreen/app/src/main/AndroidManifest.xml

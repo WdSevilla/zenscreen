@@ -1,9 +1,13 @@
 package com.freekiosk.app
 
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
@@ -35,6 +39,7 @@ class KioskActivity : AppCompatActivity() {
         binding = ActivityKioskBinding.inflate(layoutInflater)
         setContentView(binding.root)
         hideSystemUI()
+        startKioskLock()
         startServer()
         setupLongPressAdmin()
         setupTapToAdvance()
@@ -43,6 +48,7 @@ class KioskActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         applyOrientation()
+        hideSystemUI()
         reloadAndStart()
     }
 
@@ -65,6 +71,14 @@ class KioskActivity : AppCompatActivity() {
     @Suppress("OVERRIDE_DEPRECATION")
     override fun onBackPressed() { /* bloqueado */ }
 
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return when (event.keyCode) {
+            KeyEvent.KEYCODE_APP_SWITCH,
+            KeyEvent.KEYCODE_HOME -> true   // consumido — no llega al sistema
+            else -> super.dispatchKeyEvent(event)
+        }
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) hideSystemUI()
@@ -72,15 +86,38 @@ class KioskActivity : AppCompatActivity() {
 
     // ── Sistema ─────────────────────────────────────────────────────────────
 
+    @Suppress("DEPRECATION")
     private fun hideSystemUI() {
+        // API nueva (Android 11+)
         window.insetsController?.let {
             it.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
             it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+        // API antigua — MIUI ignora WindowInsetsController y responde a estas flags
+        window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            or View.SYSTEM_UI_FLAG_FULLSCREEN
+        )
     }
 
     private fun startServer() {
         startForegroundService(Intent(this, ServerService::class.java))
+    }
+
+    private fun startKioskLock() {
+        val dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val admin = ComponentName(this, KioskDeviceAdminReceiver::class.java)
+        if (dpm.isDeviceOwnerApp(packageName)) {
+            // Device Owner: lock task completo sin diálogo
+            dpm.setLockTaskPackages(admin, arrayOf(packageName))
+        }
+        try {
+            startLockTask()
+        } catch (_: Exception) { }
     }
 
     private fun applyOrientation() {

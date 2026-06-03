@@ -3952,6 +3952,7 @@ com.freekiosk.app:attr/tickMark = 0x7f04049e
 com.freekiosk.app:drawable/exo_styled_controls_shuffle_on = 0x7f0800d0
 com.freekiosk.app:attr/tickColorActive = 0x7f04049c
 com.freekiosk.app:dimen/highlight_alpha_material_colored = 0x7f0700b6
+com.freekiosk.app:xml/device_admin = 0x7f140000
 com.freekiosk.app:color/m3_sys_color_dynamic_light_inverse_surface = 0x7f0601a9
 com.freekiosk.app:string/mtrl_picker_a11y_next_month = 0x7f1100a3
 com.freekiosk.app:attr/tickColor = 0x7f04049b

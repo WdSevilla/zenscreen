@@ -41,3 +41,4 @@ string cancel
 string confirm
 string pin_wrong
 style Theme.ZenScreen
+xml device_admin
