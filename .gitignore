@@ -88,3 +88,6 @@ lint-results*.html
 *.swp
 *.swo
 *~
+
+# ─── Claude superpowers docs (local only) ────────────────────────────────────
+docs/superpowers/

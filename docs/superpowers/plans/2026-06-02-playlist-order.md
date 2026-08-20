@@ -14,15 +14,15 @@
 
 ```
 Modify: app/build.gradle.kts                                    ← add recyclerview dep
-Modify: app/src/main/java/com/freekiosk/app/Prefs.kt            ← getPlaylistOrder / setPlaylistOrder
-Modify: app/src/main/java/com/freekiosk/app/FileManager.kt      ← listMediaOrdered()
-Modify: app/src/test/java/com/freekiosk/app/FileManagerTest.kt  ← tests listMediaOrdered
+Modify: app/src/main/java/com/zenscreen/app/Prefs.kt            ← getPlaylistOrder / setPlaylistOrder
+Modify: app/src/main/java/com/zenscreen/app/FileManager.kt      ← listMediaOrdered()
+Modify: app/src/test/java/com/zenscreen/app/FileManagerTest.kt  ← tests listMediaOrdered
 Create: app/src/main/res/layout/item_playlist.xml               ← row: handle + icon + name + delete
-Create: app/src/main/java/com/freekiosk/app/PlaylistAdapter.kt  ← RecyclerView adapter
+Create: app/src/main/java/com/zenscreen/app/PlaylistAdapter.kt  ← RecyclerView adapter
 Create: app/src/main/res/drawable/ic_drag_handle.xml            ← drag handle icon
 Modify: app/src/main/res/layout/activity_admin.xml              ← add RecyclerView section
-Modify: app/src/main/java/com/freekiosk/app/AdminActivity.kt    ← wire RecyclerView + ItemTouchHelper
-Modify: app/src/main/java/com/freekiosk/app/KioskActivity.kt    ← use listMediaOrdered
+Modify: app/src/main/java/com/zenscreen/app/AdminActivity.kt    ← wire RecyclerView + ItemTouchHelper
+Modify: app/src/main/java/com/zenscreen/app/KioskActivity.kt    ← use listMediaOrdered
 ```
 
 ---
@@ -30,9 +30,9 @@ Modify: app/src/main/java/com/freekiosk/app/KioskActivity.kt    ← use listMedi
 ## Task 1: Prefs.getPlaylistOrder + FileManager.listMediaOrdered()
 
 **Files:**
-- Modify: `app/src/main/java/com/freekiosk/app/Prefs.kt`
-- Modify: `app/src/main/java/com/freekiosk/app/FileManager.kt`
-- Modify: `app/src/test/java/com/freekiosk/app/FileManagerTest.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/Prefs.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/FileManager.kt`
+- Modify: `app/src/test/java/com/zenscreen/app/FileManagerTest.kt`
 
 - [ ] **Step 1: Agregar tests para listMediaOrdered**
 
@@ -148,9 +148,9 @@ Esperado: BUILD SUCCESSFUL, todos los tests PASS.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/Prefs.kt \
-        app/src/main/java/com/freekiosk/app/FileManager.kt \
-        app/src/test/java/com/freekiosk/app/FileManagerTest.kt
+git add app/src/main/java/com/zenscreen/app/Prefs.kt \
+        app/src/main/java/com/zenscreen/app/FileManager.kt \
+        app/src/test/java/com/zenscreen/app/FileManagerTest.kt
 git commit -m "feat: playlist order in Prefs + FileManager.listMediaOrdered()"
 ```
 
@@ -262,19 +262,19 @@ git commit -m "feat: RecyclerView dep + playlist item layout and drag handle ico
 ## Task 3: PlaylistAdapter
 
 **Files:**
-- Create: `app/src/main/java/com/freekiosk/app/PlaylistAdapter.kt`
+- Create: `app/src/main/java/com/zenscreen/app/PlaylistAdapter.kt`
 
 - [ ] **Step 1: Crear PlaylistAdapter.kt**
 
 ```kotlin
-// app/src/main/java/com/freekiosk/app/PlaylistAdapter.kt
-package com.freekiosk.app
+// app/src/main/java/com/zenscreen/app/PlaylistAdapter.kt
+package com.zenscreen.app
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.freekiosk.app.databinding.ItemPlaylistBinding
+import com.zenscreen.app.databinding.ItemPlaylistBinding
 
 class PlaylistAdapter(
     val items: MutableList<MediaFile>,
@@ -339,7 +339,7 @@ Esperado: BUILD SUCCESSFUL.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/PlaylistAdapter.kt
+git add app/src/main/java/com/zenscreen/app/PlaylistAdapter.kt
 git commit -m "feat: PlaylistAdapter with drag handle and delete support"
 ```
 
@@ -426,7 +426,7 @@ git commit -m "feat: add playlist RecyclerView section to admin layout"
 ## Task 5: AdminActivity — conectar RecyclerView + ItemTouchHelper
 
 **Files:**
-- Modify: `app/src/main/java/com/freekiosk/app/AdminActivity.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/AdminActivity.kt`
 
 - [ ] **Step 1: Agregar imports al inicio de AdminActivity.kt**
 
@@ -549,7 +549,7 @@ Esperado: BUILD SUCCESSFUL.
 - [ ] **Step 7: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/AdminActivity.kt
+git add app/src/main/java/com/zenscreen/app/AdminActivity.kt
 git commit -m "feat: AdminActivity playlist with drag-to-reorder and auto-save"
 ```
 
@@ -558,7 +558,7 @@ git commit -m "feat: AdminActivity playlist with drag-to-reorder and auto-save"
 ## Task 6: KioskActivity — usar listMediaOrdered
 
 **Files:**
-- Modify: `app/src/main/java/com/freekiosk/app/KioskActivity.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/KioskActivity.kt`
 
 - [ ] **Step 1: Actualizar reloadAndStart() para usar el orden guardado**
 
@@ -585,7 +585,7 @@ Esperado: BUILD SUCCESSFUL, todos los tests PASS.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/KioskActivity.kt
+git add app/src/main/java/com/zenscreen/app/KioskActivity.kt
 git commit -m "feat: KioskActivity uses playlist order from Prefs"
 ```
 

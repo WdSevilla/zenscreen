@@ -14,12 +14,12 @@
 
 ```
 Modify: app/build.gradle.kts                           ← agregar Media3
-Modify: app/src/main/java/com/freekiosk/app/FileManager.kt   ← MediaType, MediaFile, listMedia, saveMedia
-Modify: app/src/test/java/com/freekiosk/app/FileManagerTest.kt ← nuevos tests MediaType
+Modify: app/src/main/java/com/zenscreen/app/FileManager.kt   ← MediaType, MediaFile, listMedia, saveMedia
+Modify: app/src/test/java/com/zenscreen/app/FileManagerTest.kt ← nuevos tests MediaType
 Modify: app/src/main/res/layout/activity_kiosk.xml     ← agregar PlayerView
-Modify: app/src/main/java/com/freekiosk/app/KioskActivity.kt  ← render por tipo, duración variable
-Modify: app/src/main/java/com/freekiosk/app/WifiServer.kt     ← aceptar imagen/video en upload
-Modify: app/src/main/java/com/freekiosk/app/AdminActivity.kt  ← mostrar conteo de todos los media
+Modify: app/src/main/java/com/zenscreen/app/KioskActivity.kt  ← render por tipo, duración variable
+Modify: app/src/main/java/com/zenscreen/app/WifiServer.kt     ← aceptar imagen/video en upload
+Modify: app/src/main/java/com/zenscreen/app/AdminActivity.kt  ← mostrar conteo de todos los media
 ```
 
 ---
@@ -27,8 +27,8 @@ Modify: app/src/main/java/com/freekiosk/app/AdminActivity.kt  ← mostrar conteo
 ## Task 1: MediaType + MediaFile + FileManager.listMedia()
 
 **Files:**
-- Modify: `app/src/main/java/com/freekiosk/app/FileManager.kt`
-- Modify: `app/src/test/java/com/freekiosk/app/FileManagerTest.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/FileManager.kt`
+- Modify: `app/src/test/java/com/zenscreen/app/FileManagerTest.kt`
 
 - [ ] **Step 1: Agregar tests para MediaType y listMedia()**
 
@@ -102,7 +102,7 @@ Esperado: múltiples FAILED — `MediaType`, `MediaFile`, `listMedia`, `saveMedi
 Reemplaza el contenido completo de `FileManager.kt`:
 
 ```kotlin
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.content.Context
 import java.io.File
@@ -167,8 +167,8 @@ Esperado: todos los tests de `FileManagerTest` en PASSED.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/FileManager.kt \
-        app/src/test/java/com/freekiosk/app/FileManagerTest.kt
+git add app/src/main/java/com/zenscreen/app/FileManager.kt \
+        app/src/test/java/com/zenscreen/app/FileManagerTest.kt
 git commit -m "feat: MediaType enum + MediaFile + FileManager.listMedia()"
 ```
 
@@ -270,12 +270,12 @@ git commit -m "feat: add ExoPlayer dependency and PlayerView to kiosk layout"
 ## Task 3: KioskActivity — render por tipo y duración variable
 
 **Files:**
-- Modify: `app/src/main/java/com/freekiosk/app/KioskActivity.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/KioskActivity.kt`
 
 - [ ] **Step 1: Reemplazar KioskActivity.kt completo**
 
 ```kotlin
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -288,7 +288,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.freekiosk.app.databinding.ActivityKioskBinding
+import com.zenscreen.app.databinding.ActivityKioskBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -571,7 +571,7 @@ Esperado: `BUILD SUCCESSFUL`.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/KioskActivity.kt
+git add app/src/main/java/com/zenscreen/app/KioskActivity.kt
 git commit -m "feat: KioskActivity renders PDF/image/video with variable duration"
 ```
 
@@ -580,7 +580,7 @@ git commit -m "feat: KioskActivity renders PDF/image/video with variable duratio
 ## Task 4: WifiServer — aceptar imágenes y videos en upload
 
 **Files:**
-- Modify: `app/src/main/java/com/freekiosk/app/WifiServer.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/WifiServer.kt`
 
 - [ ] **Step 1: Actualizar handleUpload y serveFileList en WifiServer.kt**
 
@@ -655,7 +655,7 @@ Esperado: `BUILD SUCCESSFUL`.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/WifiServer.kt
+git add app/src/main/java/com/zenscreen/app/WifiServer.kt
 git commit -m "feat: WifiServer accepts images and videos, shows type icon in dashboard"
 ```
 
@@ -664,7 +664,7 @@ git commit -m "feat: WifiServer accepts images and videos, shows type icon in da
 ## Task 5: AdminActivity — conteo de todos los archivos de media
 
 **Files:**
-- Modify: `app/src/main/java/com/freekiosk/app/AdminActivity.kt`
+- Modify: `app/src/main/java/com/zenscreen/app/AdminActivity.kt`
 
 - [ ] **Step 1: Actualizar refreshFileCount para mostrar conteo por tipo**
 
@@ -701,7 +701,7 @@ Esperado: `BUILD SUCCESSFUL` y todos los tests en PASSED.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add app/src/main/java/com/freekiosk/app/AdminActivity.kt
+git add app/src/main/java/com/zenscreen/app/AdminActivity.kt
 git commit -m "feat: AdminActivity shows media count broken down by type"
 ```
 
