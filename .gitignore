@@ -91,3 +91,9 @@ lint-results*.html
 
 # ─── Claude superpowers docs (local only) ────────────────────────────────────
 docs/superpowers/
+
+# ─── Firma de release (NUNCA versionar) ──────────────────────────────────────
+keystore/
+keystore.properties
+*.jks
+*.keystore
