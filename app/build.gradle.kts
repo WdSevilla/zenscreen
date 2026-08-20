@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.freekiosk.app"
+    namespace = "com.zenscreen.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.freekiosk.app"
+        applicationId = "com.zenscreen.app"
         minSdk = 26
         targetSdk = 34
         versionCode = 2

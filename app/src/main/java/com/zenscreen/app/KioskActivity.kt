@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import com.freekiosk.app.databinding.ActivityKioskBinding
+import com.zenscreen.app.databinding.ActivityKioskBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

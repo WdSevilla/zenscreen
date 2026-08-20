@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,8 +12,8 @@ import android.text.format.Formatter
 class ServerService : Service() {
 
     companion object {
-        const val ACTION_RESTART = "com.freekiosk.app.RESTART_SERVER"
-        private const val CHANNEL_ID = "freekiosk_server"
+        const val ACTION_RESTART = "com.zenscreen.app.RESTART_SERVER"
+        private const val CHANNEL_ID = "zenscreen_server"
         private const val NOTIF_ID = 1
 
         fun getPort(context: android.content.Context) = Prefs.getServerPort(context)

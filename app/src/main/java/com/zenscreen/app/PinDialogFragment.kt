@@ -1,11 +1,11 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.freekiosk.app.databinding.DialogPinBinding
+import com.zenscreen.app.databinding.DialogPinBinding
 
 class PinDialogFragment : DialogFragment() {
 

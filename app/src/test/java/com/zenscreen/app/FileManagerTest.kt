@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import org.junit.Assert.*
 import org.junit.Rule

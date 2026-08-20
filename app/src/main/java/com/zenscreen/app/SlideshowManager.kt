@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 class SlideshowManager<T>(items: List<T>) {
     private var list: List<T> = items.toList()

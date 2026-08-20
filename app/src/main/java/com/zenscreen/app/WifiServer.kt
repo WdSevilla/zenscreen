@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.content.Context
 import android.util.Base64
@@ -75,9 +75,12 @@ h2{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;mar
 .btn-sel-all:hover{background:#252b42}
 .status{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:8px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.order-hint{font-size:11px;color:#3d4460;margin-top:6px}
+.order-hint{font-size:11px;color:#3d4460;margin-top:6px;display:flex;align-items:center;gap:5px}
+.icon{width:1.2em;height:1.2em;vertical-align:-0.25em;fill:currentColor;flex-shrink:0}
+.file-icon{color:#64748b}
+h1 .icon{width:22px;height:22px;margin-right:6px}
 </style></head><body>
-<h1>📺 ZenScreen · Gestión WiFi</h1>
+<h1><svg class="icon" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg>ZenScreen · Gestión WiFi</h1>
 <div class="card">
   <h2><span class="status"></span>Servidor activo</h2>
   <p style="color:#64748b;font-size:13px">Archivos en la tablet</p>
@@ -96,17 +99,24 @@ h2{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;mar
     <button class="btn-bulk" id="btnBulk" onclick="delSelected()">Borrar seleccionados (<span id="selCount">0</span>)</button>
   </div>
   <div id="list">Cargando...</div>
-  <p class="order-hint">⠿ Arrastra las filas para cambiar el orden del slideshow</p>
+  <p class="order-hint"><svg class="icon" viewBox="0 0 24 24"><path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z"/></svg>Arrastra las filas para cambiar el orden del slideshow</p>
 </div>
 <script>
 let dragSrc=null;
 
+const ICONS={
+  drag:'<svg class="icon" viewBox="0 0 24 24"><path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z"/></svg>',
+  pdf:'<svg class="icon file-icon" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
+  image:'<svg class="icon file-icon" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
+  video:'<svg class="icon file-icon" viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>'
+};
+
 function buildList(files){
   if(files.length===0) return '<p style="color:#64748b;font-size:13px">Sin archivos todavía</p>';
   return files.map(f=>`<div class="file-row" draggable="true" data-name="${'$'}{esc(f.name)}">
-    <span class="drag-handle" title="Arrastrar para reordenar">⠿</span>
+    <span class="drag-handle" title="Arrastrar para reordenar">${'$'}{ICONS.drag}</span>
     <input type="checkbox" class="chk" value="${'$'}{esc(f.name)}" onchange="updateBulkBtn()">
-    <span class="file-info">${'$'}{f.icon} ${'$'}{esc(f.name)} <span style="color:#64748b;font-size:11px">(${'$'}{(f.size/1024).toFixed(1)} KB)</span></span>
+    <span class="file-info">${'$'}{ICONS[f.type]||ICONS.pdf} ${'$'}{esc(f.name)} <span style="color:#64748b;font-size:11px">(${'$'}{(f.size/1024).toFixed(1)} KB)</span></span>
     <button class="btn-del" onclick="del('${'$'}{esc(f.name)}')">Borrar</button>
   </div>`).join('');
 }
@@ -284,12 +294,7 @@ load();
             append("""{"files":[""")
             files.forEachIndexed { i, mf ->
                 if (i > 0) append(",")
-                val icon = when (mf.type) {
-                    MediaType.PDF   -> "📄"
-                    MediaType.IMAGE -> "🖼️"
-                    MediaType.VIDEO -> "🎬"
-                }
-                append("""{"name":"${mf.file.name}","size":${mf.file.length()},"type":"${mf.type.name.lowercase()}","icon":"$icon"}""")
+                append("""{"name":"${mf.file.name}","size":${mf.file.length()},"type":"${mf.type.name.lowercase()}"}""")
             }
             append("]}")
         }

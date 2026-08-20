@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.content.BroadcastReceiver
 import android.content.Context

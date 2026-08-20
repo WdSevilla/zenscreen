@@ -1,10 +1,10 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.freekiosk.app.databinding.ItemMediaFileBinding
+import com.zenscreen.app.databinding.ItemMediaFileBinding
 
 class MediaFileAdapter(
     private val onDelete: (MediaFile) -> Unit,
@@ -41,13 +41,13 @@ class MediaFileAdapter(
 
     inner class VH(val binding: ItemMediaFileBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(mf: MediaFile) {
-            val icon = when (mf.type) {
-                MediaType.PDF   -> "📄"
-                MediaType.IMAGE -> "🖼️"
-                MediaType.VIDEO -> "🎬"
-            }
+            binding.fileTypeIcon.setImageResource(when (mf.type) {
+                MediaType.PDF   -> R.drawable.ic_description
+                MediaType.IMAGE -> R.drawable.ic_image
+                MediaType.VIDEO -> R.drawable.ic_movie
+            })
             val sizeKb = "%.1f KB".format(mf.file.length() / 1024f)
-            binding.fileName.text = "$icon ${mf.file.name}  ($sizeKb)"
+            binding.fileName.text = "${mf.file.name}  ($sizeKb)"
 
             binding.fileCheckbox.setOnCheckedChangeListener(null)
             binding.fileCheckbox.isChecked = mf.file.name in selected

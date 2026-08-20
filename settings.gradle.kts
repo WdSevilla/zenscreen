@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "FreeKiosk"
+rootProject.name = "ZenScreen"
 include(":app")

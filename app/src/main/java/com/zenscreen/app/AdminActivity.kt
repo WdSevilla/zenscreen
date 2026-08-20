@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -22,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.freekiosk.app.databinding.ActivityAdminBinding
+import com.zenscreen.app.databinding.ActivityAdminBinding
 
 class AdminActivity : AppCompatActivity() {
 
@@ -123,9 +123,9 @@ class AdminActivity : AppCompatActivity() {
             if (all.isNotEmpty()) {
                 append("\n")
                 val parts = mutableListOf<String>()
-                if (pdfs   > 0) parts.add("📄 $pdfs PDF")
-                if (images > 0) parts.add("🖼️ $images imagen${if (images > 1) "es" else ""}")
-                if (videos > 0) parts.add("🎬 $videos video${if (videos > 1) "s" else ""}")
+                if (pdfs   > 0) parts.add("$pdfs PDF")
+                if (images > 0) parts.add("$images imagen${if (images > 1) "es" else ""}")
+                if (videos > 0) parts.add("$videos video${if (videos > 1) "s" else ""}")
                 append(parts.joinToString(" · "))
             }
         }
@@ -208,28 +208,22 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun setupOrientationButtons() {
-        highlightOrientation(Prefs.getOrientation(this))
+        val initial = when (Prefs.getOrientation(this)) {
+            "landscape" -> binding.btnOrientLandscape.id
+            "sensor"    -> binding.btnOrientSensor.id
+            else        -> binding.btnOrientPortrait.id
+        }
+        binding.orientationToggleGroup.check(initial)
 
-        binding.btnOrientPortrait.setOnClickListener {
-            Prefs.setOrientation(this, "portrait")
-            highlightOrientation("portrait")
+        binding.orientationToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            val value = when (checkedId) {
+                binding.btnOrientLandscape.id -> "landscape"
+                binding.btnOrientSensor.id    -> "sensor"
+                else                          -> "portrait"
+            }
+            Prefs.setOrientation(this, value)
         }
-        binding.btnOrientLandscape.setOnClickListener {
-            Prefs.setOrientation(this, "landscape")
-            highlightOrientation("landscape")
-        }
-        binding.btnOrientSensor.setOnClickListener {
-            Prefs.setOrientation(this, "sensor")
-            highlightOrientation("sensor")
-        }
-    }
-
-    private fun highlightOrientation(selected: String) {
-        val active   = ColorStateList.valueOf(0xFF4f8ef7.toInt())
-        val inactive = ColorStateList.valueOf(0xFF22263a.toInt())
-        binding.btnOrientPortrait.backgroundTintList  = if (selected == "portrait")  active else inactive
-        binding.btnOrientLandscape.backgroundTintList = if (selected == "landscape") active else inactive
-        binding.btnOrientSensor.backgroundTintList    = if (selected == "sensor")    active else inactive
     }
 
     // ── Configuración avanzada ──────────────────────────────────────────────
@@ -420,10 +414,12 @@ class AdminActivity : AppCompatActivity() {
 
     private fun updateLauncherButton() {
         if (isDefaultLauncher()) {
-            binding.setLauncherBtn.text = "✓ ZenScreen es el launcher activo"
+            binding.setLauncherBtn.text = "ZenScreen es el launcher activo"
+            binding.setLauncherBtn.setIconResource(R.drawable.ic_check)
             binding.setLauncherBtn.backgroundTintList = ColorStateList.valueOf(0xFF166534.toInt())
         } else {
             binding.setLauncherBtn.text = "Establecer como launcher"
+            binding.setLauncherBtn.setIconResource(R.drawable.ic_home)
             binding.setLauncherBtn.backgroundTintList = ColorStateList.valueOf(0xFF22263a.toInt())
         }
     }

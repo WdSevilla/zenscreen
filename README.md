@@ -123,7 +123,7 @@ Contraseña: zenscreen
 ### Vía USB / almacenamiento local
 
 1. Conecta la tablet por USB o usa un explorador de archivos
-2. Navega a: `Android/data/com.freekiosk.app/files/pdfs/`
+2. Navega a: `Android/data/com.zenscreen.app/files/pdfs/`
 3. Copia tus archivos ahí (PDF, imagen o video)
 4. El kiosk los detecta al próximo ciclo
 
@@ -239,7 +239,7 @@ ZenScreen implementa tres capas sin necesidad de root ni Device Owner:
 
 ```
 zenscreen/
-├── app/src/main/java/com/freekiosk/app/
+├── app/src/main/java/com/zenscreen/app/
 │   ├── MainActivity.kt          # Entry point: permisos → launcher → kiosk
 │   ├── KioskActivity.kt         # Pantalla principal: slideshow PDF/imagen/video
 │   ├── AdminActivity.kt         # Panel de configuración con PIN

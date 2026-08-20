@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -7,40 +8,50 @@
     android:paddingVertical="10dp"
     android:paddingHorizontal="4dp">
 
-    <TextView
+    <ImageView
         android:id="@+id/dragHandle"
         android:layout_width="32dp"
-        android:layout_height="wrap_content"
-        android:text="⠿"
-        android:textSize="20sp"
-        android:textColor="#3d4460"
-        android:gravity="center"
-        android:paddingEnd="4dp" />
+        android:layout_height="24dp"
+        android:src="@drawable/ic_drag_handle"
+        app:tint="@color/outline"
+        android:scaleType="centerInside"
+        android:paddingEnd="4dp"
+        android:contentDescription="Reordenar" />
 
     <CheckBox
         android:id="@+id/fileCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:buttonTint="#4f8ef7"
+        android:buttonTint="@color/accent"
         android:layout_marginEnd="8dp" />
+
+    <ImageView
+        android:id="@+id/fileTypeIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:tint="@color/muted"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@null" />
 
     <TextView
         android:id="@+id/fileName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="#e2e8f0"
+        android:textColor="@color/text"
         android:textSize="13sp"
         android:ellipsize="end"
         android:singleLine="true" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDeleteFile"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Borrar"
-        android:textColor="#ef4444"
+        android:textColor="@color/error"
+        app:icon="@drawable/ic_delete"
+        app:iconTint="@color/error"
         android:minWidth="0dp"
         android:paddingHorizontal="8dp" />
 

@@ -1,4 +1,4 @@
-package com.freekiosk.app
+package com.zenscreen.app
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -13,7 +13,7 @@ object Prefs {
     // Valores posibles: "portrait", "landscape", "sensor"
     const val DEFAULT_ORIENTATION = "portrait"
 
-    private const val NAME = "freekiosk_prefs"
+    private const val NAME = "zenscreen_prefs"
     private const val KEY_PIN = "admin_pin"
     private const val KEY_INTERVAL = "slideshow_interval"
     private const val KEY_ORIENTATION = "orientation"
