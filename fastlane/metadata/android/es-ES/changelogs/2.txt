@@ -1,0 +1,6 @@
+• Gestión de archivos desde el panel admin: selección múltiple, borrado y arrastrar para reordenar
+• Servidor WiFi: selección múltiple, borrado en lote y reordenar arrastrando
+• Navegación táctil: mitad izquierda = anterior, mitad derecha = siguiente
+• Transiciones suaves con fade entre slides
+• Versión visible en el panel admin
+• Correcciones: el slideshow retoma donde iba al salir del panel admin; sin destello de la imagen anterior tras un video

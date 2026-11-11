@@ -74,7 +74,7 @@ Pensada para tabletas fijas en **recepciones, salas de espera, exhibiciones o pu
 ### Opción B — Compilar desde código
 
 ```bash
-git clone https://github.com/tu-usuario/zenscreen.git
+git clone https://github.com/WdSevilla/zenscreen.git
 cd zenscreen
 ./gradlew assembleDebug
 adb install app/build/outputs/apk/debug/app-debug.apk
@@ -399,4 +399,4 @@ El número de build (`versionCode`) sube con cada APK publicado, independienteme
 
 ## Licencia
 
-MIT — libre para uso personal y comercial.
+MIT — libre para uso personal y comercial. Ver [LICENSE](LICENSE).

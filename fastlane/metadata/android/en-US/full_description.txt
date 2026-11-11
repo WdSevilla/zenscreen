@@ -1,0 +1,20 @@
+ZenScreen turns an Android tablet into an unattended multimedia kiosk. It shows PDFs, images and videos full screen in an endless loop — ideal for reception desks, waiting rooms, exhibitions and information points.
+
+<b>Features</b>
+<ul>
+<li>Looping slideshow of PDFs, images and videos with configurable interval and order</li>
+<li>Built-in WiFi server: upload, delete and reorder files from any browser on the same network (password protected)</li>
+<li>Kiosk mode: blocks the Back button and hides system bars</li>
+<li>Works as the home launcher, so Home always returns to the kiosk</li>
+<li>Starts automatically when the tablet boots, for 24/7 use</li>
+<li>Hidden admin panel protected by PIN (long press on the top-right corner)</li>
+<li>Touch navigation: tap the left half to go back, the right half to go forward</li>
+<li>Configurable orientation, PIN, port and WiFi credentials</li>
+<li>Works offline after the content is loaded</li>
+</ul>
+
+<b>Supported formats</b>
+PDF · JPG, PNG, WebP, GIF, BMP · MP4, MKV, MOV, AVI, WebM, 3GP
+
+<b>About the permissions</b>
+ZenScreen can register as the default launcher and use device administrator rights only to keep the screen locked in kiosk mode. The internet permission is used solely for the local WiFi server on your network. There are no ads, no trackers and no data is sent anywhere.

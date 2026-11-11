@@ -1,0 +1,1 @@
+Convierte una tablet Android en un kiosko de PDFs, imágenes y videos en bucle
