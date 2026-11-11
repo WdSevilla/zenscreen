@@ -1,0 +1,20 @@
+ZenScreen convierte una tablet Android en un kiosko multimedia desatendido. Muestra PDFs, imágenes y videos en pantalla completa en un bucle continuo, ideal para recepciones, salas de espera, exhibiciones y puntos de información.
+
+<b>Características</b>
+<ul>
+<li>Presentación en bucle de PDFs, imágenes y videos, con intervalo y orden configurables</li>
+<li>Servidor WiFi integrado: sube, borra y reordena archivos desde cualquier navegador de la misma red (protegido con contraseña)</li>
+<li>Modo kiosko: bloquea el botón Atrás y oculta las barras del sistema</li>
+<li>Funciona como launcher, así que Inicio siempre vuelve al kiosko</li>
+<li>Arranca sola al encender la tablet, para uso 24/7</li>
+<li>Panel de administración oculto protegido con PIN (pulsación larga en la esquina superior derecha)</li>
+<li>Navegación táctil: toca la mitad izquierda para retroceder y la derecha para avanzar</li>
+<li>Orientación, PIN, puerto y credenciales WiFi configurables</li>
+<li>Funciona sin internet una vez cargado el contenido</li>
+</ul>
+
+<b>Formatos soportados</b>
+PDF · JPG, PNG, WebP, GIF, BMP · MP4, MKV, MOV, AVI, WebM, 3GP
+
+<b>Sobre los permisos</b>
+ZenScreen puede registrarse como launcher predeterminado y usar permisos de administrador del dispositivo solo para mantener la pantalla bloqueada en modo kiosko. El permiso de internet se usa únicamente para el servidor WiFi local de tu red. No tiene anuncios ni rastreadores y no envía datos a ningún lado.

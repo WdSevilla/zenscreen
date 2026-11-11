@@ -1,0 +1,1 @@
+Turn an Android tablet into a looping kiosk for PDFs, images and videos

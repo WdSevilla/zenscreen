@@ -1,0 +1,6 @@
+• Manage files from the admin panel: multi-select, delete and drag to reorder
+• WiFi server: multi-select, bulk delete and drag-and-drop reordering
+• Touch navigation: tap left half for previous, right half for next
+• Smooth fade transitions between slides
+• Version shown in the admin panel
+• Fixes: slideshow resumes where it left off after leaving the admin panel; no flash of the previous image after a video
