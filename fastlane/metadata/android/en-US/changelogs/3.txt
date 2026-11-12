@@ -1,0 +1,1 @@
+• Smaller, cleaner APK: removed the Google-only dependency metadata block and disabled code obfuscation (code is still optimized)

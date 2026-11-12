@@ -362,6 +362,10 @@ El número de build (`versionCode`) sube con cada APK publicado, independienteme
 
 ## Changelog
 
+### v1.1.1 — 2026-11-12
+- APK sin el bloque `DEPENDENCY_INFO_BLOCK` de Google (requisito de IzzyOnDroid)
+- R8 optimiza sin ofuscar (`-dontobfuscate`)
+
 ### v1.1.0 — 2026-06-02
 **Nuevas funciones**
 - Gestión de archivos desde el panel admin: lista con checkboxes, borrado individual y múltiple, drag & drop para reordenar

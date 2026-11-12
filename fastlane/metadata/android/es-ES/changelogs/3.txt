@@ -1,0 +1,1 @@
+• APK más limpio: se quitó el bloque de metadatos de dependencias exclusivo de Google y se desactivó la ofuscación (el código sigue optimizado)

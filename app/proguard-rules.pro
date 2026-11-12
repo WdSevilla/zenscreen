@@ -7,5 +7,8 @@
 -keep class com.zenscreen.app.KioskDeviceAdminReceiver { *; }
 -keep class com.zenscreen.app.BootReceiver { *; }
 
-# Conservar nombres de línea para stacktraces legibles en Play Console
+# Optimizar y reducir, pero sin ofuscar (código legible, recomendado por IzzyOnDroid)
+-dontobfuscate
+
+# Conservar nombres de línea para stacktraces legibles
 -keepattributes SourceFile,LineNumberTable
