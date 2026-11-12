@@ -21,8 +21,8 @@ android {
         applicationId = "com.zenscreen.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -59,6 +59,11 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    // Sin el bloque de dependencias cifrado para Google (IzzyOnDroid/F-Droid lo rechazan)
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
     }
 }
 
